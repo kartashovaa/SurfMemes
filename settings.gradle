@@ -1,1 +1,3 @@
-include ':app'
+include ':app', ':textfieldboxes', ':sample'
+project(':textfieldboxes').projectDir = new File('app/libs/TextFieldBoxes/textfieldboxes')
+project(':sample').projectDir = new File('app/libs/TextFieldBoxes/sample')
