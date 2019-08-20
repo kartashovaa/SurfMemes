@@ -4,11 +4,11 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageButton;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes;
@@ -34,7 +34,8 @@ public class LoginScreen extends AppCompatActivity {
         loginBtn = findViewById(R.id.login_button);
         loginProgressBar = findViewById(R.id.progress_bar);
         passwordBtn = passwordBox.getEndIconImageButton();
-        passwordBox.setHelperText(String.format("Пароль должен содержать %d символов", passwordLength));
+        passwordBox.setHelperText(String.format(getString(R.string.password_helper_pattern), passwordLength));
+        passwordField.setFilters(new InputFilter.LengthFilter[]{new InputFilter.LengthFilter(passwordLength)});
 
 
         passwordBtn.setOnClickListener(new View.OnClickListener() {
@@ -53,19 +54,24 @@ public class LoginScreen extends AppCompatActivity {
                 is_hidden = !is_hidden;
             }
         });
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String login = loginField.getText().toString();
                 String password = passwordField.getText().toString();
-                findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
 
-                if (login.isEmpty())
-                    loginBox.setError("Поле не можен быть пустым!", true);
-                else if (password.isEmpty())
-                    passwordBox.setError("Поле не можен быть пустым!", true);
-                else {
-                    findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
+                if(login.isEmpty() || password.isEmpty()) {
+                    if (password.isEmpty())
+                        passwordBox.setError(getString(R.string.auth_error_msg), true);
+                    if (login.isEmpty())
+                        loginBox.setError(getString(R.string.auth_error_msg), true);
+
+                } else if (password.length()!=passwordLength) {
+                    passwordBox.setError(String.format(
+                            getString(R.string.password_helper_pattern), passwordLength),
+                            true);
+                } else {
                     final String btnText = loginBtn.getText().toString();
                     loginBtn.setText("");
                     loginProgressBar.setTranslationZ(10f);
@@ -75,12 +81,12 @@ public class LoginScreen extends AppCompatActivity {
                         public void run() {
                             loginBtn.setText(btnText);
                             loginProgressBar.setTranslationZ(0f);
-
-                            Toast.makeText(LoginScreen.this.getApplicationContext(), "Login... login: " + loginField.getText() + " password: " + passwordField.getText(), Toast.LENGTH_SHORT).show();
                         }
                     }, 5000);
+
                 }
             }
         });
     }
+
 }
