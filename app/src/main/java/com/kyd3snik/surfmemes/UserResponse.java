@@ -7,7 +7,7 @@ public class UserResponse {
     @SerializedName("accessToken")
     @Expose
     private String accessToken;
-    @SerializedName("UserInfo")
+    @SerializedName("userInfo")
     @Expose
     private UserInfo userInfo;
 

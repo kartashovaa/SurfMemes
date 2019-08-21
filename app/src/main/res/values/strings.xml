@@ -3,4 +3,8 @@
     <string name="login_button_text">Войти</string>
     <string name="auth_error_msg">Поле не можен быть пустым!</string>
     <string name="password_helper_pattern">Пароль должен содержать %d символов</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="memes_list">This is memes list</string>
+    <string name="profile">This is profile</string>
 </resources>

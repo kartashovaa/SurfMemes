@@ -1,10 +1,7 @@
 package com.kyd3snik.surfmemes;
 
-import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
 
 public class NetworkService {
     private static NetworkService mInstance;
@@ -25,14 +22,8 @@ public class NetworkService {
 
 
     }
-    authAPI getAPI() {
-        return mRetrofit.create(authAPI.class);
+    MemeApi getAPI() {
+        return mRetrofit.create(MemeApi.class);
     }
 }
 
-interface authAPI {
-
-    @POST("/auth/login")
-    Call<UserResponse> login(@Body authRequest auth);
-
-}

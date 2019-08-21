@@ -1,6 +1,7 @@
 package com.kyd3snik.surfmemes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -104,15 +105,17 @@ public class LoginScreen extends AppCompatActivity {
                                     e.putString("userDescription", ui.getUserDescription());
                                 }
                                 e.apply();
-                            }else
+                                Intent intent = new Intent(LoginScreen.this,MainScreen.class);
+                                startActivity(intent);
+                                finish();
+                            }else {
                                 Snackbar.make(findViewById(R.id.root),
                                         "Во время запроса произошла ошибка, возможно вы неверно ввели логин/пароль",
                                         Snackbar.LENGTH_LONG).show();
-
-                            Snackbar.make(findViewById(R.id.root),String.format("Code %d",response.raw().code()),Snackbar.LENGTH_SHORT).show();
-                            loginBtn.setText(btnText);
-                            loginBtn.setEnabled(true);
-                            loginProgressBar.setTranslationZ(0f);
+                                loginBtn.setText(btnText);
+                                loginBtn.setEnabled(true);
+                                loginProgressBar.setTranslationZ(0f);
+                            }
                         }
 
                         @Override
