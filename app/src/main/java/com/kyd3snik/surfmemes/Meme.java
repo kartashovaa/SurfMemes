@@ -3,7 +3,9 @@ package com.kyd3snik.surfmemes;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-class Meme {
+import java.io.Serializable;
+
+class Meme implements Serializable {
     @SerializedName("id")
     @Expose
     String id;

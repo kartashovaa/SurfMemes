@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import retrofit2.Response;
  */
 public class MemesListFragment extends Fragment {
     RecyclerView recyclerView;
-
+    SwipeRefreshLayout swipeRefreshLayout;
 
 
     public static MemesListFragment newInstance() {
@@ -52,12 +53,29 @@ public class MemesListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.memes_recycle_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showMemes();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        showMemes();
+    }
+    void showMemes() {
         NetworkService.getInstance().getAPI().getMemes().enqueue(new Callback<List<Meme>>() {
             @Override
             public void onResponse(Call<List<Meme>> call, Response<List<Meme>> response) {
                 List<Meme> memes = response.body();
-                recyclerView.setAdapter(new MemesAdapter(memes));
+                MemesAdapter memesAdapter = (MemesAdapter) recyclerView.getAdapter();
+                if(memesAdapter!= null) {
+                    memesAdapter.setMemes(memes);
+                    memesAdapter.notifyDataSetChanged();
+                } else
+                    recyclerView.setAdapter(new MemesAdapter(memes));
             }
 
             @Override
@@ -65,6 +83,5 @@ public class MemesListFragment extends Fragment {
 
             }
         });
-
     }
 }
