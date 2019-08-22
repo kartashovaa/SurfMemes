@@ -18,26 +18,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MemesListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MemesListFragment extends Fragment {
+public class MemesListFragment extends Fragment implements Callback<List<Meme>> {
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-
-
-    public static MemesListFragment newInstance() {
-        return new MemesListFragment();
-    }
+    private MemesAdapter memesAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
@@ -54,34 +42,42 @@ public class MemesListFragment extends Fragment {
         recyclerView = view.findViewById(R.id.memes_recycle_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
-
+        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorAccent);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorBackground);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 showMemes();
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
-
         showMemes();
     }
+
+    void setMemes(List<Meme> memes) {
+        if(memesAdapter==null) {
+            memesAdapter = new MemesAdapter(memes);
+            recyclerView.setAdapter(memesAdapter);
+        } else {
+            memesAdapter.setMemes(memes);
+            memesAdapter.notifyDataSetChanged();
+        }
+
+    }
+
     void showMemes() {
-        NetworkService.getInstance().getAPI().getMemes().enqueue(new Callback<List<Meme>>() {
-            @Override
-            public void onResponse(Call<List<Meme>> call, Response<List<Meme>> response) {
-                List<Meme> memes = response.body();
-                MemesAdapter memesAdapter = (MemesAdapter) recyclerView.getAdapter();
-                if(memesAdapter!= null) {
-                    memesAdapter.setMemes(memes);
-                    memesAdapter.notifyDataSetChanged();
-                } else
-                    recyclerView.setAdapter(new MemesAdapter(memes));
-            }
 
-            @Override
-            public void onFailure(Call<List<Meme>> call, Throwable t) {
+        NetworkService.getInstance().getMemeApi().getMemes().enqueue(this);
+    }
 
-            }
-        });
+    @Override
+    public void onResponse(Call<List<Meme>> call, Response<List<Meme>> response) {
+        if(response.isSuccessful())
+            setMemes(response.body());
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onFailure(Call<List<Meme>> call, Throwable t) {
+        //swipeRefreshLayout.setRefreshing(false);
     }
 }

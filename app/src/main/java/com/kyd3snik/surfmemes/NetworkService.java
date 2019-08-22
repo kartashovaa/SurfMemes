@@ -22,8 +22,12 @@ public class NetworkService {
 
 
     }
-    MemeApi getAPI() {
+    MemeApi getMemeApi() {
         return mRetrofit.create(MemeApi.class);
     }
+    AuthApi getAuthApi() {
+        return mRetrofit.create(AuthApi.class);
+    }
+
 }
 

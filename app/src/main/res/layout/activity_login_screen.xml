@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
     tools:context=".LoginScreen">
 
@@ -16,12 +16,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
-        app:labelText="Логин"
+        app:labelText="@string/login_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:primaryColor="@color/colorAccent"
-        app:secondaryColor="@color/colorPrimaryDark">
+        app:secondaryColor="@color/colorGray">
 
         <studio.carbonylgroup.textfieldboxes.ExtendedEditText
             android:id="@+id/login"
@@ -30,7 +30,7 @@
             android:imeOptions="actionNext"
             android:inputType="phone"
             android:maxLength="11"
-            app:singleLine="true" />
+            app:singleLine="true"/>
 
     </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
@@ -41,15 +41,13 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingTop="0dp"
-        app:endIcon="@drawable/show_password"
-
-        app:labelText="Пароль"
+        app:endIcon="@drawable/hide_password"
+        app:labelText="@string/password_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_box"
         app:primaryColor="@color/colorAccent"
-        app:secondaryColor="@color/colorPrimaryDark">
+        app:secondaryColor="@color/colorGray">
 
         <studio.carbonylgroup.textfieldboxes.ExtendedEditText
             android:id="@+id/password"
@@ -70,7 +68,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         android:background="@color/colorAccent"
-        android:radius="15dp"
         android:text="@string/login_button_text"
         android:textColor="@color/colorButtonText"
         android:textSize="14sp"

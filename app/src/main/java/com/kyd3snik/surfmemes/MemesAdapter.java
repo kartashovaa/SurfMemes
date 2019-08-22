@@ -60,7 +60,7 @@ class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
         public void update(Meme meme) {
             this.meme = meme;
             titleView.setText(meme.title);
-            Glide.with(context).load("").error(R.drawable.ic_add).into(imageView);
+            Glide.with(context).load(meme.photoUrl).error(R.drawable.ic_add).into(imageView);
             setFavorite();
         }
 
@@ -73,6 +73,7 @@ class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
     public MemesAdapter(List<Meme> data) {
         setMemes(data);
     }
+
     public void setMemes(List<Meme> memes) {
         this.memes = memes;
     }

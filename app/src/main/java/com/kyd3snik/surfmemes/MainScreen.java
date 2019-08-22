@@ -18,24 +18,31 @@ public class MainScreen extends AppCompatActivity {
     Fragment memesList;
     Fragment profile;
     Fragment active;
+    Fragment errorLoad;
     private void setFragment(Fragment fragment) {
         fragmentTransaction.detach(active);
         fragmentTransaction.attach(fragment);
         active = fragment;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+        getWindow().setStatusBarColor(getColor(R.color.colorBackground2));
+
         memesList = new MemesListFragment();
         profile = new ProfileFragment();
+        errorLoad = new ErrorLoadFragment();
         active = memesList;
         fragmentManager = getSupportFragmentManager();
 
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.frameLayout, memesList,"memesList");
         fragmentTransaction.add(R.id.frameLayout, profile, "profile");
+        fragmentTransaction.add(R.id.frameLayout, errorLoad,"errorLoad");
         fragmentTransaction.detach(profile);
+        fragmentTransaction.detach(errorLoad);
         fragmentTransaction.attach(active);
         fragmentTransaction.commit();
 

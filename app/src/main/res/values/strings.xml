@@ -3,8 +3,9 @@
     <string name="login_button_text">Войти</string>
     <string name="auth_error_msg">Поле не можен быть пустым!</string>
     <string name="password_helper_pattern">Пароль должен содержать %d символов</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="memes_list">This is memes list</string>
     <string name="profile">This is profile</string>
+    <string name="login_placeholder">Логин</string>
+    <string name="password_label">Пароль</string>
+    <string name="error_load_fragment_text">Не удалось загрузить ленту\nОбновите экран или попробуйте позже.</string>
 </resources>

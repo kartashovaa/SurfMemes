@@ -2,7 +2,7 @@ package com.kyd3snik.surfmemes;
 
 import com.google.gson.annotations.SerializedName;
 
-public class authRequest {
+public class AuthRequest {
     @SerializedName("login")
     private String login;
     @SerializedName("password")

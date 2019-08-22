@@ -7,6 +7,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 public class MemeDetailActivity extends AppCompatActivity {
     TextView titleView;
     ImageView imgView;
@@ -31,6 +33,7 @@ public class MemeDetailActivity extends AppCompatActivity {
         titleView.setText(meme.title);
         detailView.setText(meme.description);
         timeView.setText(String.valueOf(meme.createdDate));
+        Glide.with(getApplicationContext()).load(meme.photoUrl).error(R.drawable.ic_add).into(imgView);
         favoriteBtn.setImageResource(meme.isFavorite? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
         favoriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +42,7 @@ public class MemeDetailActivity extends AppCompatActivity {
                 favoriteBtn.setImageResource(meme.isFavorite? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
             }
         });
+
         closeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

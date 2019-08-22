@@ -14,8 +14,8 @@
 
     <ImageButton
         android:id="@+id/close"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:src="@drawable/ic_close"
         android:layout_margin="21dp"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -25,8 +25,8 @@
 
     <ImageButton
         android:id="@+id/share"
-        android:layout_width="18dp"
-        android:layout_height="20dp"
+        android:layout_width="22dp"
+        android:layout_height="24dp"
         android:src="@drawable/ic_share"
         android:layout_margin="19dp"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
