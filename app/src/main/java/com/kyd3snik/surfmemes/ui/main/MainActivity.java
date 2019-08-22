@@ -1,4 +1,4 @@
-package com.kyd3snik.surfmemes;
+package com.kyd3snik.surfmemes.ui.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,7 +10,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class MainScreen extends AppCompatActivity {
+import com.kyd3snik.surfmemes.R;
+
+public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -20,15 +22,16 @@ public class MainScreen extends AppCompatActivity {
     Fragment active;
     Fragment errorLoad;
     private void setFragment(Fragment fragment) {
-        fragmentTransaction.detach(active);
-        fragmentTransaction.attach(fragment);
+        fragmentTransaction.hide(active);
+        fragmentTransaction.show(fragment);
+        fragmentTransaction.show(fragment);
         active = fragment;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_screen);
+        setContentView(R.layout.activity_main);
         getWindow().setStatusBarColor(getColor(R.color.colorBackground2));
 
         memesList = new MemesListFragment();
@@ -38,15 +41,15 @@ public class MainScreen extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, memesList,"memesList");
-        fragmentTransaction.add(R.id.frameLayout, profile, "profile");
-        fragmentTransaction.add(R.id.frameLayout, errorLoad,"errorLoad");
-        fragmentTransaction.detach(profile);
-        fragmentTransaction.detach(errorLoad);
-        fragmentTransaction.attach(active);
+        fragmentTransaction.add(R.id.fragmentHolder, memesList,"memesList");
+        fragmentTransaction.add(R.id.fragmentHolder, profile, "profile");
+        fragmentTransaction.add(R.id.fragmentHolder, errorLoad,"errorLoad");
+        fragmentTransaction.hide(profile);
+        fragmentTransaction.hide(errorLoad);
+        fragmentTransaction.show(active);
         fragmentTransaction.commit();
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -56,7 +59,7 @@ public class MainScreen extends AppCompatActivity {
                         setFragment(memesList);
                         break;
                     case R.id.add:
-                        Snackbar.make(findViewById(R.id.root),"TODO:",Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.root_layout),"TODO:",Snackbar.LENGTH_LONG).show();
                         break;
                     case R.id.profile:
                         setFragment(profile);

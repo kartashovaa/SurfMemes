@@ -1,4 +1,4 @@
-package com.kyd3snik.surfmemes;
+package com.kyd3snik.surfmemes.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,4 +1,7 @@
-package com.kyd3snik.surfmemes;
+package com.kyd3snik.surfmemes.api;
+
+import com.kyd3snik.surfmemes.models.AuthRequest;
+import com.kyd3snik.surfmemes.models.UserResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

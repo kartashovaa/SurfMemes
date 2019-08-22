@@ -2,10 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainScreen"
+    tools:context=".ui.main.MainActivity"
     android:background="@color/colorBackground">
 
 
@@ -22,13 +22,13 @@
 
 
     <FrameLayout
-        android:id="@+id/frameLayout"
+        android:id="@+id/fragmentHolder"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,11 +38,10 @@
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+        android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:background="@color/colorBottomNavBarBackground"
         app:menu="@xml/main_menu"
         app:itemTextColor="@xml/bottom_nav_color"
         app:itemIconTint="@xml/bottom_nav_color"
@@ -54,7 +53,7 @@
     </android.support.design.widget.BottomNavigationView>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/title_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -65,8 +64,8 @@
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <ImageButton
+        android:id="@+id/search_button"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="16dp"

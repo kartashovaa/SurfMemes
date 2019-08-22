@@ -1,4 +1,6 @@
-package com.kyd3snik.surfmemes;
+package com.kyd3snik.surfmemes.api;
+
+import com.kyd3snik.surfmemes.models.Meme;
 
 import java.util.List;
 

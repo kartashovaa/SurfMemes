@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
-        <activity android:name=".SplashScreen">
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,15 +24,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginScreen"
+            android:name=".ui.login.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".MainScreen" />
+        <activity android:name=".ui.main.MainActivity" />
 
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/main_menu" />
 
-        <activity android:name=".MemeDetailActivity"></activity>
+        <activity android:name=".ui.main.MemeDetailActivity"></activity>
     </application>
 
 </manifest>

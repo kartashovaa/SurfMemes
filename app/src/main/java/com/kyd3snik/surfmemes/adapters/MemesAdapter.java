@@ -1,4 +1,4 @@
-package com.kyd3snik.surfmemes;
+package com.kyd3snik.surfmemes.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.kyd3snik.surfmemes.R;
+import com.kyd3snik.surfmemes.models.Meme;
+import com.kyd3snik.surfmemes.ui.main.MemeDetailActivity;
 
 import java.util.List;
 
-class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
+public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
     private Context context;
     private List<Meme> memes;
 
@@ -26,18 +29,19 @@ class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
         public TextView titleView;
         public ImageButton likeButton;
         public ImageButton shareButton;
+
         public ViewHolder(@NonNull View itemView, final Context context) {
             super(itemView);
             this.context = context;
-            imageView = itemView.findViewById(R.id.image);
-            titleView = itemView.findViewById(R.id.title);
+            imageView = itemView.findViewById(R.id.image_view);
+            titleView = itemView.findViewById(R.id.title_tv);
             likeButton = itemView.findViewById(R.id.like_button);
             shareButton = itemView.findViewById(R.id.share_button);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ViewHolder.this.context,MemeDetailActivity.class);
-                    intent.putExtra("Meme",meme);
+                    Intent intent = new Intent(ViewHolder.this.context, MemeDetailActivity.class);
+                    intent.putExtra("Meme", meme);
                     context.startActivity(intent);
                 }
             });
@@ -81,12 +85,12 @@ class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        if(context == null)
+        if (context == null)
             context = viewGroup.getContext();
 
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_meme,viewGroup,false);
-        return new ViewHolder(view,context);
+                .inflate(R.layout.item_meme, viewGroup, false);
+        return new ViewHolder(view, context);
     }
 
     @Override
@@ -96,6 +100,6 @@ class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return memes==null ? 0 : memes.size();
+        return memes == null ? 0 : memes.size();
     }
 }

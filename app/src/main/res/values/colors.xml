@@ -9,4 +9,5 @@
     <color name="colorButtonText">#1F2032</color>
     <color name="colorError">#FF575D</color>
     <color name="colorNotActiveNavMenuItem">#FFFFFF</color>
+    <color name="colorBottomNavBarBackground">#12102B</color>
 </resources>

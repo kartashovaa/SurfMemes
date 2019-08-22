@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MemeDetailActivity"
+    tools:context=".ui.main.MemeDetailActivity"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -13,7 +13,7 @@
         android:layout_height="56dp"/>
 
     <ImageButton
-        android:id="@+id/close"
+        android:id="@+id/close_button"
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:src="@drawable/ic_close"
@@ -24,7 +24,7 @@
         />
 
     <ImageButton
-        android:id="@+id/share"
+        android:id="@+id/share_button"
         android:layout_width="22dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_share"
@@ -39,32 +39,38 @@
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/title_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:id="@+id/time"
+                android:id="@+id/time_tv"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <ImageButton
-                android:id="@+id/favorite"
+                android:id="@+id/favorite_button"
                 android:layout_margin="21dp"
-                android:layout_width="14dp"
-                android:layout_height="12dp"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+                android:layout_width="25dp"
+                android:layout_height="30dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
-            android:id="@+id/detail"
+            android:id="@+id/detail_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
