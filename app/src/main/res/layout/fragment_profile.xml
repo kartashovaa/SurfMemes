@@ -3,10 +3,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
     tools:context=".ui.main.ProfileFragment">
 
     <Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="16dp"
+            android:background="@color/colorBackground"
+            android:src="@drawable/ic_context_menu" />
+    </Toolbar>
+
+
+    <ImageView
+        android:id="@+id/user_avatar_view"
+        android:layout_width="69dp"
+        android:layout_height="69dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/avatar" />
+
+
+    <TextView
+        android:id="@+id/name_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
+        android:textColor="@color/colorDetailMemeText"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/user_description_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="32dp"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
 </LinearLayout>
