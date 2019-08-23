@@ -28,22 +28,25 @@ public class MemesListFragment extends Fragment implements Callback<List<Meme>> 
     SwipeRefreshLayout swipeRefreshLayout;
     private MemesAdapter memesAdapter;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_memes_list, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         recyclerView = view.findViewById(R.id.memes_recycle_view);
-        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setHasFixedSize(false);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorAccent);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorBackground);
@@ -64,10 +67,10 @@ public class MemesListFragment extends Fragment implements Callback<List<Meme>> 
             memesAdapter.setMemes(memes);
             memesAdapter.notifyDataSetChanged();
         }
-
     }
 
     void showMemes() {
+
         NetworkService.getInstance().getMemeApi().getMemes().enqueue(this);
     }
 
@@ -80,7 +83,6 @@ public class MemesListFragment extends Fragment implements Callback<List<Meme>> 
 
     @Override
     public void onFailure(Call<List<Meme>> call, Throwable t) {
-
-        swipeRefreshLayout.setRefreshing(false);
+        //swipeRefreshLayout.setRefreshing(false);
     }
 }

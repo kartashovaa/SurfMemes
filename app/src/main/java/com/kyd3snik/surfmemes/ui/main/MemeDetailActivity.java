@@ -24,9 +24,9 @@ public class MemeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meme_detail);
-        titleView = findViewById(R.id.title);
-        imgView = findViewById(R.id.image);
-        timeView = findViewById(R.id.time);
+        titleView = findViewById(R.id.title_tv);
+        imgView = findViewById(R.id.image_view);
+        timeView = findViewById(R.id.time_tv);
         favoriteBtn = findViewById(R.id.favorite_button);
         detailView = findViewById(R.id.detail_view);
         closeBtn = findViewById(R.id.close_button);
