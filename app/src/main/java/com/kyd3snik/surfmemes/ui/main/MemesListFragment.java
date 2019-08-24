@@ -36,7 +36,6 @@ public class MemesListFragment extends Fragment implements Callback<List<Meme>> 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_memes_list, container, false);
     }
 
@@ -82,6 +81,8 @@ public class MemesListFragment extends Fragment implements Callback<List<Meme>> 
 
     @Override
     public void onFailure(Call<List<Meme>> call, Throwable t) {
-        //swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setRefreshing(false);
+        //TODO: replace
+        ((MainActivity) getActivity()).showErrorLoadFragment();
     }
 }

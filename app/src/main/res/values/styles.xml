@@ -12,4 +12,14 @@
         <item name="android:background">@color/colorBackground2</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/colorBackground2</item>
+        <item name="android:textColor">@color/colorNotActiveNavMenuItem</item>
+        <item name="android:buttonStyle">@style/DialogButtonsTheme</item>
+    </style>
+
+    <style name="DialogButtonsTheme">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
 </resources>

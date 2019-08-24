@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresentor.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        presentor = new LoginPresentor(this);
+        presentor = new LoginPresentor(getApplicationContext(), this);
         initViews();
         initListeners();
     }
