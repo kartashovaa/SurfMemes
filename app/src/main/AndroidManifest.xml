@@ -32,6 +32,9 @@
             android:resource="@xml/main_menu" />
 
         <activity android:name=".ui.main.MemeDetailActivity" />
+        <activity
+            android:name=".ui.main.AddMemeActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

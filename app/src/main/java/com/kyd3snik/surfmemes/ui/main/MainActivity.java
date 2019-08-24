@@ -1,9 +1,9 @@
 package com.kyd3snik.surfmemes.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment profile;
     Fragment active;
     Fragment errorLoad;
+
     private void setFragment(Fragment fragment) {
         fragmentTransaction.hide(active);
         fragmentTransaction.show(fragment);
@@ -41,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fragmentHolder, memesList,"memesList");
+        fragmentTransaction.add(R.id.fragmentHolder, memesList, "memesList");
         fragmentTransaction.add(R.id.fragmentHolder, profile, "profile");
-        fragmentTransaction.add(R.id.fragmentHolder, errorLoad,"errorLoad");
+        fragmentTransaction.add(R.id.fragmentHolder, errorLoad, "errorLoad");
         fragmentTransaction.hide(profile);
         fragmentTransaction.hide(errorLoad);
         fragmentTransaction.show(active);
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         setFragment(memesList);
                         break;
                     case R.id.add:
-                        Snackbar.make(findViewById(R.id.root_layout),"TODO:",Snackbar.LENGTH_LONG).show();
+                        showAddMemeActivity();
                         break;
                     case R.id.profile:
                         setFragment(profile);
@@ -70,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    void showAddMemeActivity() {
+        Intent intent = new Intent(this, AddMemeActivity.class);
+        startActivity(intent);
     }
 
 }
