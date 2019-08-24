@@ -31,7 +31,7 @@
         app:itemIconTint="@xml/bottom_nav_color"
         app:itemTextColor="@xml/bottom_nav_color"
         app:labelVisibilityMode="unlabeled"
-        app:menu="@xml/main_menu">
+        app:menu="@menu/main_menu">
 
     </android.support.design.widget.BottomNavigationView>
 

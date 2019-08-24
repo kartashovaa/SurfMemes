@@ -9,4 +9,6 @@
     <string name="password_label">Пароль</string>
     <string name="error_load_fragment_text">Не удалось загрузить ленту\nОбновите экран или попробуйте позже.</string>
     <string name="main_title">Популярные мемы</string>
+    <string name="about_app">О приложении</string>
+    <string name="logout">Выйти</string>
 </resources>

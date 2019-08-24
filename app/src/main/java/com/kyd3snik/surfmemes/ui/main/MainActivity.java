@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private void setFragment(Fragment fragment) {
         fragmentTransaction.hide(active);
         fragmentTransaction.show(fragment);
-        fragmentTransaction.show(fragment);
         active = fragment;
     }
 
@@ -61,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.add:
                         showAddMemeActivity();
-                        break;
+                        return false;
                     case R.id.profile:
                         setFragment(profile);
                         break;

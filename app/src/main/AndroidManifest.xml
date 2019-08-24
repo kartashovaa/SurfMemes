@@ -29,7 +29,7 @@
 
         <meta-data
             android:name="com.google.android.actions"
-            android:resource="@xml/main_menu" />
+            android:resource="@menu/main_menu" />
 
         <activity android:name=".ui.main.MemeDetailActivity" />
         <activity
