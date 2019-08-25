@@ -85,8 +85,8 @@ public class AddMemeActivity extends AppCompatActivity {
         dettachButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attachedImagePath = "";
                 attachedImageView.setVisibility(View.GONE);
+                attachButton.setVisibility(View.VISIBLE);
                 dettachButton.setVisibility(View.GONE);
             }
         });
@@ -130,11 +130,15 @@ public class AddMemeActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_REQUEST_CODE);
         } else {
-            Intent photoPicker = new Intent(Intent.ACTION_PICK);
-            photoPicker.setType("image/*");
-            startActivityForResult(photoPicker, PHOTO_LOAD_REQUEST);
+            loadPhoto();
         }
 
+    }
+
+    private void loadPhoto() {
+        Intent photoPicker = new Intent(Intent.ACTION_PICK);
+        photoPicker.setType("image/*");
+        startActivityForResult(photoPicker, PHOTO_LOAD_REQUEST);
     }
 
     private String getPath(Uri uri) {
@@ -150,6 +154,7 @@ public class AddMemeActivity extends AppCompatActivity {
         attachedImagePath = getPath(uri);
         Glide.with(this).load(attachedImagePath).into(attachedImageView);
         attachedImageView.setVisibility(View.VISIBLE);
+        attachButton.setVisibility(View.GONE);
         dettachButton.setVisibility(View.VISIBLE);
     }
 
@@ -168,7 +173,8 @@ public class AddMemeActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == READ_REQUEST_CODE)
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                getPhotoFromGallery();
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                loadPhoto();
+            }
     }
 }

@@ -16,7 +16,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
-        android:background="@drawable/login_button_rounded_corners"
+        android:background="@drawable/login_button_bg"
         android:text="@string/login_button_text"
         android:textColor="@color/colorButtonText"
         android:textSize="14sp"

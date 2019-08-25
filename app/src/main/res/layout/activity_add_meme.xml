@@ -15,6 +15,15 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@color/colorBackground"
+            android:src="@drawable/ic_close"
+            tools:ignore="ContentDescription" />
+
         <Button
             android:id="@+id/create_button"
             android:layout_width="wrap_content"
@@ -27,26 +36,8 @@
             android:textColor="@color/colorAccent"
             android:textSize="16sp" />
 
-        <ImageButton
-            android:id="@+id/close_button"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_margin="21dp"
-            android:background="@color/colorBackground"
-            android:src="@drawable/ic_close"
-            tools:ignore="ContentDescription" />
-    </android.support.v7.widget.Toolbar>
 
-    <ImageButton
-        android:id="@+id/attach_button"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/meme_item_rounded_corners"
-        android:src="@drawable/ic_attach"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:ignore="ContentDescription" />
+    </android.support.v7.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -94,7 +85,7 @@
 
             <ImageView
                 android:id="@+id/attached_image_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:layout_margin="24dp"
@@ -117,5 +108,16 @@
                 app:layout_constraintTop_toTopOf="@id/attached_image_view" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
+
+    <ImageButton
+        android:id="@+id/attach_button"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/meme_item_rounded_corners"
+        android:src="@drawable/ic_attach"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="ContentDescription" />
 
 </android.support.constraint.ConstraintLayout>

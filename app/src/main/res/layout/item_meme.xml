@@ -33,7 +33,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="5dp"
-            android:background="@color/colorBackground2"
+            android:background="@drawable/meme_item_button_bg"
             android:src="@drawable/ic_not_favorite"
             tools:ignore="ContentDescription" />
 
@@ -42,7 +42,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_margin="5dp"
-            android:background="@color/colorBackground2"
+            android:background="@drawable/meme_item_button_bg"
             android:src="@drawable/ic_share"
             tools:ignore="ContentDescription" />
     </LinearLayout>
