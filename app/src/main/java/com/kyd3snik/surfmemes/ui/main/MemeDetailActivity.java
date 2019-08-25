@@ -1,13 +1,20 @@
 package com.kyd3snik.surfmemes.ui.main;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.models.Meme;
 import com.kyd3snik.surfmemes.utils.ShareUtil;
@@ -25,6 +32,7 @@ public class MemeDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        postponeEnterTransition();
         setContentView(R.layout.activity_meme_detail);
         meme = (Meme) getIntent().getSerializableExtra("Meme");
         initViews();
@@ -66,6 +74,15 @@ public class MemeDetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.home) {
+            supportFinishAfterTransition();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void showMeme() {
         titleView.setText(meme.title);
         detailView.setText(meme.description);
@@ -75,7 +92,19 @@ public class MemeDetailActivity extends AppCompatActivity {
             timeView.setText(getString(R.string.today));
         else
             timeView.setText(String.format("%d %s", timeDiff / millisInDay, getString(R.string.date_view_suffix)));
-        Glide.with(getApplicationContext()).load(meme.photoUrl).into(imgView);
+        Glide.with(getApplicationContext()).load(meme.photoUrl).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                supportStartPostponedEnterTransition();
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                supportStartPostponedEnterTransition();
+                return false;
+            }
+        }).into(imgView);
         favoriteBtn.setImageResource(meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
     }
 }

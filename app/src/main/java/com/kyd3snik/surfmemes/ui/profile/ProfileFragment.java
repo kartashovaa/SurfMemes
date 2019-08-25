@@ -94,7 +94,7 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
     @Override
     public void setMemes(List<Meme> memes) {
         if (memesAdapter == null) {
-            memesAdapter = new MemesAdapter(memes);
+            memesAdapter = new MemesAdapter(memes, getActivity());
             favoriteMemesRv.setAdapter(memesAdapter);
         } else {
             memesAdapter.addMemes(memes);

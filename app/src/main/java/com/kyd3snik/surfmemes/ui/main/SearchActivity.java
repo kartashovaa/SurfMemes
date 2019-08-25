@@ -93,7 +93,7 @@ public class SearchActivity extends AppCompatActivity implements MemesRepository
                 memesRecycler.setVisibility(View.GONE);
                 errorTv.setVisibility(View.VISIBLE);
             } else if (memesAdapter == null) {
-                memesAdapter = new MemesAdapter(filterMemes);
+                memesAdapter = new MemesAdapter(filterMemes, this);
                 memesRecycler.setAdapter(memesAdapter);
             } else {
                 memesAdapter.setMemes(filterMemes);

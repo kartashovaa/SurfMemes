@@ -69,7 +69,7 @@ public class MemesListFragment extends Fragment implements MemesRepository.OnLoa
 
     private void setMemes(List<Meme> memes) {
         if (memesAdapter == null) {
-            memesAdapter = new MemesAdapter(memes);
+            memesAdapter = new MemesAdapter(memes, getActivity());
             recyclerView.setAdapter(memesAdapter);
         } else {
             memesAdapter.addMemes(memes);

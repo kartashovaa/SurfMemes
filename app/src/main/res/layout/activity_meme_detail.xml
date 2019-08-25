@@ -26,12 +26,15 @@
 
             <ImageView
                 android:id="@+id/image_view"
+                android:transitionName="image"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/title_tv"
+                android:transitionName="title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorDetailMemeText"

@@ -1,8 +1,11 @@
 package com.kyd3snik.surfmemes.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +23,23 @@ import com.kyd3snik.surfmemes.utils.ShareUtil;
 import java.util.List;
 
 public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
-    private Context context;
+    private static Context context;
+    private static Activity activity;
     private List<Meme> memes;
 
-    public MemesAdapter(List<Meme> data) {
+    public MemesAdapter(List<Meme> data, Activity activity) {
         setMemes(data);
+        MemesAdapter.activity = activity;
+
+    }
+
+    private static void showMemeDetailActivity(Meme meme, View titleView, View imageView) {
+        Intent intent = new Intent(context, MemeDetailActivity.class);
+        intent.putExtra("Meme", meme);
+        Pair<View, String> title = Pair.create(titleView, "title");
+        Pair<View, String> image = Pair.create(imageView, "image");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, title, image);
+        context.startActivity(intent, options.toBundle());
     }
 
     private boolean findMemeById(Meme newMeme) {
@@ -91,9 +106,7 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ViewHolder.this.context, MemeDetailActivity.class);
-                    intent.putExtra("Meme", meme);
-                    context.startActivity(intent);
+                    showMemeDetailActivity(meme, titleView, imageView);
                 }
             });
             likeButton.setOnClickListener(new View.OnClickListener() {
@@ -124,4 +137,5 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
                     meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
         }
     }
+
 }
