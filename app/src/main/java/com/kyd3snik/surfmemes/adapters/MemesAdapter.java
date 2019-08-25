@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.models.Meme;
 import com.kyd3snik.surfmemes.ui.main.MemeDetailActivity;
+import com.kyd3snik.surfmemes.utils.ShareUtil;
 
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
             shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: share
+                    ShareUtil.shareMeme(context, meme);
                 }
             });
         }

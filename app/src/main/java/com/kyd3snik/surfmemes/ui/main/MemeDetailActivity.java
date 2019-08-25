@@ -10,8 +10,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.models.Meme;
+import com.kyd3snik.surfmemes.utils.ShareUtil;
 
 public class MemeDetailActivity extends AppCompatActivity {
+    private Meme meme;
     private TextView titleView;
     private ImageView imgView;
     private TextView timeView;
@@ -24,6 +26,13 @@ public class MemeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meme_detail);
+        meme = (Meme) getIntent().getSerializableExtra("Meme");
+        initViews();
+        initListeners();
+        showMeme();
+    }
+
+    void initViews() {
         titleView = findViewById(R.id.title_tv);
         imgView = findViewById(R.id.image_view);
         timeView = findViewById(R.id.time_tv);
@@ -31,19 +40,9 @@ public class MemeDetailActivity extends AppCompatActivity {
         detailView = findViewById(R.id.detail_view);
         closeBtn = findViewById(R.id.close_button);
         shareBtn = findViewById(R.id.share_button);
+    }
 
-        final Meme meme = (Meme)getIntent().getSerializableExtra("Meme");
-        titleView.setText(meme.title);
-        detailView.setText(meme.description);
-        long timeDiff = System.currentTimeMillis() - meme.createdDate*1000;
-        final int millisInDay = 60*60*24*1000;
-        if(timeDiff<millisInDay)
-            timeView.setText("Cегодня");
-        else
-            timeView.setText(timeDiff / millisInDay + " дней назад");
-
-        Glide.with(getApplicationContext()).load(meme.photoUrl).into(imgView);
-        favoriteBtn.setImageResource(meme.isFavorite? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
+    void initListeners() {
         favoriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,8 +61,21 @@ public class MemeDetailActivity extends AppCompatActivity {
         shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ShareUtil.shareMeme(MemeDetailActivity.this, meme);
             }
         });
+    }
+
+    void showMeme() {
+        titleView.setText(meme.title);
+        detailView.setText(meme.description);
+        long timeDiff = System.currentTimeMillis() - meme.createdDate * 1000;
+        final int millisInDay = 60 * 60 * 24 * 1000;
+        if (timeDiff < millisInDay)
+            timeView.setText("Cегодня");
+        else
+            timeView.setText(timeDiff / millisInDay + " дней назад");
+        Glide.with(getApplicationContext()).load(meme.photoUrl).into(imgView);
+        favoriteBtn.setImageResource(meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
     }
 }
