@@ -10,7 +10,7 @@ import retrofit2.Response;
 
 
 public class AuthRepository {
-    private final static String LOGIN = "88005553535";
+    private final static String LOGIN = "78005553535";
     private final static String PASSWORD = "123456";
     public final static int PASSWORD_LENGTH = 6;
 

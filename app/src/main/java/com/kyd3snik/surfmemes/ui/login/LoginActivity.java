@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
-import android.text.InputFilter;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.kyd3snik.surfmemes.CustomPhoneNumberFormattingTextWatcher;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.presenters.LoginPresenter;
 import com.kyd3snik.surfmemes.repositories.AuthRepository;
@@ -45,16 +45,16 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
         loginBox = findViewById(R.id.login_box);
         passwordField = findViewById(R.id.password_te);
         passwordBox = findViewById(R.id.password_box);
+        passwordBox.setHelperText(String.format(getString(R.string.password_helper_pattern), AuthRepository.PASSWORD_LENGTH));
         loginBtn = findViewById(R.id.login_button);
         loginProgressBar = findViewById(R.id.login_pb);
         passwordBtn = passwordBox.getEndIconImageButton();
         root = findViewById(R.id.root);
-        passwordBox.setHelperText(String.format(getString(R.string.password_helper_pattern), AuthRepository.PASSWORD_LENGTH));
-        passwordField.setFilters(new InputFilter.LengthFilter[]{new InputFilter.LengthFilter(AuthRepository.PASSWORD_LENGTH)});
     }
 
     void initListeners() {
         loginBtn.setOnClickListener(presenter);
+        loginField.addTextChangedListener(new CustomPhoneNumberFormattingTextWatcher(loginField));
         passwordBtn.setOnClickListener(new View.OnClickListener() {
             boolean is_hidden = true;
 
@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
 
     @Override
     public String getLogin() {
-        return loginField.getText().toString();
+        return loginField.getText().toString().replaceAll("[^\\d]", "");
     }
 
     @Override

@@ -29,8 +29,9 @@
             android:layout_height="33dp"
             android:imeOptions="actionNext"
             android:inputType="phone"
-            android:maxLength="11"
-            app:singleLine="true"/>
+            app:singleLine="true"
+            android:maxLength="18"
+            android:text="+7" />
 
     </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
