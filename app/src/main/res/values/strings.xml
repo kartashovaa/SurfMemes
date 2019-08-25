@@ -11,4 +11,12 @@
     <string name="main_title">Популярные мемы</string>
     <string name="about_app">О приложении</string>
     <string name="logout">Выйти</string>
+    <string name="login_prefix">+7</string>
+    <string name="title_hint">Заголовок</string>
+    <string name="text_hint">Текст</string>
+    <string name="create_button_text">создать</string>
+    <string name="search_hint">Поиск</string>
+    <string name="error_empty">Ничего не найдено</string>
+    <string name="date_view_suffix">дней назад</string>
+    <string name="today">Cегодня</string>
 </resources>

@@ -7,6 +7,7 @@ public class AuthRequest {
     public String login;
     @SerializedName("password")
     public String password;
+
     public AuthRequest(String login, String password) {
         this.login = login;
         this.password = password;

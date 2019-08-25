@@ -65,7 +65,7 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.update(memes.get(i));
+        viewHolder.bind(memes.get(i));
     }
 
     @Override
@@ -73,15 +73,15 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
         return memes == null ? 0 : memes.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        final public Context context;
-        public Meme meme;
-        public ImageView imageView;
-        public TextView titleView;
-        public ImageButton likeButton;
-        public ImageButton shareButton;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        private Context context;
+        private Meme meme;
+        private ImageView imageView;
+        private TextView titleView;
+        private ImageButton likeButton;
+        private ImageButton shareButton;
 
-        public ViewHolder(@NonNull View itemView, final Context context) {
+        ViewHolder(@NonNull View itemView, final Context context) {
             super(itemView);
             this.context = context;
             imageView = itemView.findViewById(R.id.image_view);
@@ -112,7 +112,7 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
             });
         }
 
-        public void update(Meme meme) {
+        void bind(Meme meme) {
             this.meme = meme;
             titleView.setText(meme.title);
             Glide.with(context).load(meme.photoUrl).into(imageView);

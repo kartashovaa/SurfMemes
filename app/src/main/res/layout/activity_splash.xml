@@ -9,6 +9,6 @@
     <View
         android:layout_width="91dp"
         android:layout_height="104.6dp"
-        android:background="@drawable/surf_edu"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:background="@drawable/surf_edu" />
 </FrameLayout>

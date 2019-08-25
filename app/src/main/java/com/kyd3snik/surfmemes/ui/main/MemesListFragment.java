@@ -81,7 +81,7 @@ public class MemesListFragment extends Fragment implements MemesRepository.OnLoa
         MemesRepository.getMemes(this);
     }
 
-    void loadSearchActivity() {
+    private void loadSearchActivity() {
         getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
     }
 

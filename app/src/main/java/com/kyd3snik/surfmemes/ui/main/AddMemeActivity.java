@@ -26,8 +26,8 @@ import com.kyd3snik.surfmemes.models.Meme;
 import com.kyd3snik.surfmemes.repositories.MemesRepository;
 
 public class AddMemeActivity extends AppCompatActivity {
-    public static final int PHOTO_LOAD_REQUEST = 1;
     private static final int READ_REQUEST_CODE = 0;
+    private static final int PHOTO_LOAD_REQUEST = 1;
     private EditText titleEt;
     private EditText textEt;
     private Button createButton;
@@ -45,7 +45,7 @@ public class AddMemeActivity extends AppCompatActivity {
         initListeners();
     }
 
-    void initViews() {
+    private void initViews() {
         titleEt = findViewById(R.id.title_et);
         textEt = findViewById(R.id.text_et);
         closeButton = findViewById(R.id.close_button);
@@ -57,73 +57,6 @@ public class AddMemeActivity extends AppCompatActivity {
         setEnabledCreateButton(false);
         attachedImageView.setVisibility(View.GONE);
         dettachButton.setVisibility(View.GONE);
-    }
-
-    void setEnabledCreateButton(boolean enable) {
-        createButton.setEnabled(enable);
-        createButton.setAlpha(enable ? 1f : 0.5f);
-    }
-
-    private Meme getMeme() {
-        Meme meme = new Meme();
-        long createdDate = System.currentTimeMillis() / 1000;
-        meme.id = String.valueOf(createdDate);
-        meme.title = titleEt.getText().toString();
-        meme.description = textEt.getText().toString();
-        meme.createdDate = createdDate;
-        if (attachedImageView.getVisibility() == View.VISIBLE)
-            meme.photoUrl = attachedImagePath;
-        return meme;
-    }
-
-    private void getPhotoFromGallery() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_REQUEST_CODE);
-        } else
-            loadPhoto();
-
-    }
-
-
-    public String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        startManagingCursor(cursor);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
-    private void setAttachedImage(Uri uri) {
-        attachedImagePath = getPath(uri);
-        Glide.with(this).load(attachedImagePath).into(attachedImageView);
-        attachedImageView.setVisibility(View.VISIBLE);
-        dettachButton.setVisibility(View.VISIBLE);
-    }
-
-    private void loadPhoto() {
-        Intent photoPicker = new Intent(Intent.ACTION_PICK);
-        photoPicker.setType("image/*");
-        startActivityForResult(photoPicker, PHOTO_LOAD_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PHOTO_LOAD_REQUEST && resultCode == RESULT_OK) {
-            setAttachedImage(data.getData());
-
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == READ_REQUEST_CODE)
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                loadPhoto();
     }
 
     private void initListeners() {
@@ -173,5 +106,69 @@ public class AddMemeActivity extends AppCompatActivity {
                 setEnabledCreateButton(!titleEt.getText().toString().trim().isEmpty());
             }
         });
+    }
+
+    private void setEnabledCreateButton(boolean enable) {
+        createButton.setEnabled(enable);
+        createButton.setAlpha(enable ? 1f : 0.5f);
+    }
+
+    private Meme getMeme() {
+        Meme meme = new Meme();
+        long createdDate = System.currentTimeMillis() / 1000;
+        meme.id = String.valueOf(createdDate);
+        meme.title = titleEt.getText().toString();
+        meme.description = textEt.getText().toString();
+        meme.createdDate = createdDate;
+        if (attachedImageView.getVisibility() == View.VISIBLE)
+            meme.photoUrl = attachedImagePath;
+        return meme;
+    }
+
+    private void getPhotoFromGallery() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_REQUEST_CODE);
+        } else {
+            Intent photoPicker = new Intent(Intent.ACTION_PICK);
+            photoPicker.setType("image/*");
+            startActivityForResult(photoPicker, PHOTO_LOAD_REQUEST);
+        }
+
+    }
+
+    private String getPath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        //startManagingCursor(cursor);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    private void setAttachedImage(Uri uri) {
+        attachedImagePath = getPath(uri);
+        Glide.with(this).load(attachedImagePath).into(attachedImageView);
+        attachedImageView.setVisibility(View.VISIBLE);
+        dettachButton.setVisibility(View.VISIBLE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PHOTO_LOAD_REQUEST && resultCode == RESULT_OK && data != null) {
+            setAttachedImage(data.getData());
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == READ_REQUEST_CODE)
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                getPhotoFromGallery();
     }
 }

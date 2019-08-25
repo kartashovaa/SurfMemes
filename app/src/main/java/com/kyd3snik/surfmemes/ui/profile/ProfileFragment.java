@@ -1,4 +1,4 @@
-package com.kyd3snik.surfmemes.ui.main;
+package com.kyd3snik.surfmemes.ui.profile;
 
 import android.app.Activity;
 import android.arch.lifecycle.LifecycleOwner;

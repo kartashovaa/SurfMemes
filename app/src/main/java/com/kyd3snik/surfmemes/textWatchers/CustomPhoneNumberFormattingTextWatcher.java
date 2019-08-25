@@ -1,4 +1,4 @@
-package com.kyd3snik.surfmemes;
+package com.kyd3snik.surfmemes.textWatchers;
 
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;

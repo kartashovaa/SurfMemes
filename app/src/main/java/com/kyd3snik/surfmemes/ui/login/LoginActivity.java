@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import com.kyd3snik.surfmemes.CustomPhoneNumberFormattingTextWatcher;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.presenters.LoginPresenter;
 import com.kyd3snik.surfmemes.repositories.AuthRepository;
+import com.kyd3snik.surfmemes.textWatchers.CustomPhoneNumberFormattingTextWatcher;
 import com.kyd3snik.surfmemes.ui.main.MainActivity;
 
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
         initListeners();
     }
 
-    void initViews() {
+    private void initViews() {
         loginField = findViewById(R.id.login_te);
         loginBox = findViewById(R.id.login_box);
         passwordField = findViewById(R.id.password_te);
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
         root = findViewById(R.id.root);
     }
 
-    void initListeners() {
+    private void initListeners() {
         loginBtn.setOnClickListener(presenter);
         loginField.addTextChangedListener(new CustomPhoneNumberFormattingTextWatcher(loginField));
         passwordBtn.setOnClickListener(new View.OnClickListener() {

@@ -94,6 +94,7 @@ public class ProfilePresenter implements PopupMenu.OnMenuItemClickListener, Meme
         View getView();
 
         LifecycleOwner getLivecycleOwner();
+
         void loadLoginActivity();
     }
 }

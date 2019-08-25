@@ -1,5 +1,7 @@
 package com.kyd3snik.surfmemes.repositories;
 
+import android.support.annotation.NonNull;
+
 import com.kyd3snik.surfmemes.api.NetworkService;
 import com.kyd3snik.surfmemes.models.AuthRequest;
 import com.kyd3snik.surfmemes.models.UserResponse;
@@ -10,9 +12,9 @@ import retrofit2.Response;
 
 
 public class AuthRepository {
+    public final static int PASSWORD_LENGTH = 6;
     private final static String LOGIN = "78005553535";
     private final static String PASSWORD = "123456";
-    public final static int PASSWORD_LENGTH = 6;
 
     private static boolean isValidFields(AuthRequest auth, OnLoginFinishedListener listener) {
         if (auth == null)
@@ -39,13 +41,13 @@ public class AuthRepository {
             if (isValidAuth(auth))
                 NetworkService.getInstance().getAuthApi().login(auth).enqueue(new Callback<UserResponse>() {
                     @Override
-                    public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                    public void onResponse(@NonNull Call<UserResponse> call, @NonNull Response<UserResponse> response) {
                         if (response.isSuccessful())
                             listener.onSuccess(response.body());
                     }
 
                     @Override
-                    public void onFailure(Call<UserResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
                         listener.onNetworkError();
                     }
                 });

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/about"
+        android:background="@null"
         android:title="@string/about_app"
-        app:showAsAction="ifRoom"
-        android:background="@null" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/logout"
+        android:background="@null"
         android:title="@string/logout"
-        app:showAsAction="ifRoom"
-        android:background="@null" />
+        app:showAsAction="ifRoom" />
 
 </menu>

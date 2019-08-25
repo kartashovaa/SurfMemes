@@ -18,7 +18,9 @@
             android:maxWidth="300dp"
             android:maxLines="1"
             android:background="@null"
-            android:hint="Поиск" />
+            android:hint="@string/search_hint"
+            android:inputType="text"
+            android:importantForAutofill="no" />
 
         <ImageButton
             android:id="@+id/close_button"
@@ -27,7 +29,8 @@
             android:layout_margin="16dp"
             android:background="@color/colorBackground"
             android:src="@drawable/ic_close"
-            android:layout_gravity="end" />
+            android:layout_gravity="end"
+            tools:ignore="ContentDescription" />
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
@@ -40,6 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:text="Ничего не найдено"
+        android:text="@string/error_empty"
         android:gravity="center" />
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.kyd3snik.surfmemes.R;
+import com.kyd3snik.surfmemes.ui.profile.ProfileFragment;
 import com.kyd3snik.surfmemes.utils.FragmentNav;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
                         showAddMemeActivity();
                         return false;
                     case R.id.profile:
+                        if (profile == null) {
+                            profile = new ProfileFragment();
+                            fragmentNav.add(profile, "profile");
+                        }
                         fragmentNav.show(profile);
                         break;
                 }
@@ -55,15 +60,13 @@ public class MainActivity extends AppCompatActivity {
     private void initFragmentNav() {
         fragmentNav = new FragmentNav(getSupportFragmentManager());
         memesList = new MemesListFragment();
-        profile = new ProfileFragment();
         errorLoad = new ErrorLoadFragment();
         fragmentNav.add(memesList, "memesList");
-        fragmentNav.add(profile, "profile");
         fragmentNav.add(errorLoad, "errorLoad");
         fragmentNav.show(memesList);
     }
 
-    void showAddMemeActivity() {
+    private void showAddMemeActivity() {
         Intent intent = new Intent(this, AddMemeActivity.class);
         startActivity(intent);
     }

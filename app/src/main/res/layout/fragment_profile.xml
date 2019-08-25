@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground"
     android:orientation="vertical"
-    tools:context=".ui.main.ProfileFragment">
+    tools:context=".ui.profile.ProfileFragment">
 
     <Toolbar
         android:layout_width="match_parent"
@@ -20,7 +20,8 @@
             android:layout_gravity="end"
             android:layout_margin="16dp"
             android:background="@color/colorBackground"
-            android:src="@drawable/ic_context_menu" />
+            android:src="@drawable/ic_context_menu"
+            tools:ignore="ContentDescription" />
     </Toolbar>
 
 

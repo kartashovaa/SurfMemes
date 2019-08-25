@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import com.kyd3snik.surfmemes.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ErrorLoadFragment extends Fragment {
 
     @Override
