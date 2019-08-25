@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViews();
         initListeners();
+        initFragmentNav();
     }
 
     private void initListeners() {
@@ -48,16 +49,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         getWindow().setStatusBarColor(getColor(R.color.colorBackground2));
+        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+    }
+
+    private void initFragmentNav() {
         fragmentNav = new FragmentNav(getSupportFragmentManager());
         memesList = new MemesListFragment();
         profile = new ProfileFragment();
         errorLoad = new ErrorLoadFragment();
-        fragmentNav.add(memesList);
-        fragmentNav.add(profile);
-        fragmentNav.add(errorLoad);
+        fragmentNav.add(memesList, "memesList");
+        fragmentNav.add(profile, "profile");
+        fragmentNav.add(errorLoad, "errorLoad");
         fragmentNav.show(memesList);
-
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
     }
 
     void showAddMemeActivity() {

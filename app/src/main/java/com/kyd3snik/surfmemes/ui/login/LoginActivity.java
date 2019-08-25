@@ -12,16 +12,16 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.kyd3snik.surfmemes.R;
-import com.kyd3snik.surfmemes.presentors.LoginPresentor;
+import com.kyd3snik.surfmemes.presenters.LoginPresenter;
 import com.kyd3snik.surfmemes.repositories.AuthRepository;
 import com.kyd3snik.surfmemes.ui.main.MainActivity;
 
 import studio.carbonylgroup.textfieldboxes.ExtendedEditText;
 import studio.carbonylgroup.textfieldboxes.TextFieldBoxes;
 
-public class LoginActivity extends AppCompatActivity implements LoginPresentor.LoginView {
+public class LoginActivity extends AppCompatActivity implements LoginPresenter.LoginView {
 
-    private LoginPresentor presentor;
+    private LoginPresenter presenter;
     private ExtendedEditText loginField;
     private TextFieldBoxes loginBox;
     private ExtendedEditText passwordField;
@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresentor.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        presentor = new LoginPresentor(getApplicationContext(), this);
+        presenter = new LoginPresenter(this);
         initViews();
         initListeners();
     }
@@ -54,17 +54,17 @@ public class LoginActivity extends AppCompatActivity implements LoginPresentor.L
     }
 
     void initListeners() {
-        loginBtn.setOnClickListener(presentor);
+        loginBtn.setOnClickListener(presenter);
         passwordBtn.setOnClickListener(new View.OnClickListener() {
             boolean is_hidden = true;
 
             @Override
             public void onClick(View v) {
                 if (is_hidden) {
-                    passwordField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    passwordField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
                     passwordBtn.setImageResource(R.drawable.show_password);
                 } else {
-                    passwordField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    passwordField.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
                     passwordBtn.setImageResource(R.drawable.hide_password);
 
                 }

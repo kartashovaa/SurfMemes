@@ -4,19 +4,25 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PrefUtil {
+    private static final String PREF_NAME = "PrefUtils";
     private static final String DEFAULT_STRING_VALUE = "";
     private static SharedPreferences sharedPreferences;
     private static PrefUtil instance;
 
     private PrefUtil(Context context) {
-        context = context.getApplicationContext();
         sharedPreferences = context.getSharedPreferences(
-                context.getPackageName(), Context.MODE_PRIVATE);
+                PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public static PrefUtil with(Context context) {
+    public static PrefUtil initialize(Context context) {
         if (instance == null)
             instance = new PrefUtil(context);
+        return instance;
+    }
+
+    public static PrefUtil getInstance() {
+        if (instance == null)
+            throw new RuntimeException("Pref utils doesn't initialized!");
         return instance;
     }
 

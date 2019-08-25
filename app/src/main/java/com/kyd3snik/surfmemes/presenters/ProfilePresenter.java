@@ -1,8 +1,11 @@
-package com.kyd3snik.surfmemes.presentors;
+package com.kyd3snik.surfmemes.presenters;
 
 import android.app.AlertDialog;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,20 +19,20 @@ import com.kyd3snik.surfmemes.utils.PrefUtil;
 
 import java.util.List;
 
-public class ProfilePresentor implements PopupMenu.OnMenuItemClickListener, MemesRepository.OnLoadedMemesListener {
+public class ProfilePresenter implements PopupMenu.OnMenuItemClickListener, MemesRepository.OnLoadedMemesListener, Observer<List<Meme>> {
     private Context context;
     private ProfileView view;
 
-    public ProfilePresentor(Context context, ProfileView view) {
+    public ProfilePresenter(Context context, ProfileView view) {
         this.view = view;
         this.context = context;
-        view.setName(PrefUtil.with(context).getString(PrefUtil.Keys.USERNAME));
-        view.setDescription(PrefUtil.with(context).getString(PrefUtil.Keys.USER_DESCRIPTION));
+        view.setName(PrefUtil.getInstance().getString(PrefUtil.Keys.USERNAME));
+        view.setDescription(PrefUtil.getInstance().getString(PrefUtil.Keys.USER_DESCRIPTION));
         showMemes();
     }
 
     private void showMemes() {
-        MemesRepository.getMemes(this);
+        MemesRepository.getLocalMemes().observe(view.getLivecycleOwner(), this);
     }
 
     @Override
@@ -46,6 +49,11 @@ public class ProfilePresentor implements PopupMenu.OnMenuItemClickListener, Meme
 
     }
 
+    @Override
+    public void onChanged(@Nullable List<Meme> memes) {
+        view.setMemes(memes);
+    }
+
     private void showExitDialogView() {
         new AlertDialog.Builder(context, R.style.DialogTheme)
                 .setTitle("Действительно хотите выйти?")
@@ -53,7 +61,7 @@ public class ProfilePresentor implements PopupMenu.OnMenuItemClickListener, Meme
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         NetworkService.getInstance().getAuthApi().logout();
-                        PrefUtil.with(context).clear();
+                        PrefUtil.getInstance().clear();
                         view.loadLoginActivity();
                     }
                 }).setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
@@ -85,6 +93,7 @@ public class ProfilePresentor implements PopupMenu.OnMenuItemClickListener, Meme
 
         View getView();
 
+        LifecycleOwner getLivecycleOwner();
         void loadLoginActivity();
     }
 }

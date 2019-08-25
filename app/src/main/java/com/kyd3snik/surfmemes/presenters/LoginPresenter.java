@@ -1,6 +1,5 @@
-package com.kyd3snik.surfmemes.presentors;
+package com.kyd3snik.surfmemes.presenters;
 
-import android.content.Context;
 import android.view.View;
 
 import com.kyd3snik.surfmemes.models.AuthRequest;
@@ -9,14 +8,12 @@ import com.kyd3snik.surfmemes.repositories.AuthRepository;
 import com.kyd3snik.surfmemes.utils.PrefUtil;
 import com.kyd3snik.surfmemes.utils.PrefUtil.Keys;
 
-public class LoginPresentor implements View.OnClickListener, AuthRepository.OnLoginFinishedListener {
+public class LoginPresenter implements View.OnClickListener, AuthRepository.OnLoginFinishedListener {
 
     private LoginView view;
-    private Context context;
 
-    public LoginPresentor(Context context, LoginView view) {
+    public LoginPresenter(LoginView view) {
         this.view = view;
-        this.context = context;
     }
 
     @Override
@@ -27,11 +24,12 @@ public class LoginPresentor implements View.OnClickListener, AuthRepository.OnLo
 
     @Override
     public void onSuccess(UserResponse userResponse) {
-        PrefUtil.with(context).putString(Keys.ACCESS_TOKEN, userResponse.accessToken);
-        PrefUtil.with(context).putString(Keys.USERNAME, userResponse.userInfo.username);
-        PrefUtil.with(context).putString(Keys.FIRSTNAME, userResponse.userInfo.firstName);
-        PrefUtil.with(context).putString(Keys.LASTNAME, userResponse.userInfo.lastName);
-        PrefUtil.with(context).putString(Keys.USER_DESCRIPTION, userResponse.userInfo.userDescription);
+        PrefUtil util = PrefUtil.getInstance();
+        util.putString(Keys.ACCESS_TOKEN, userResponse.accessToken);
+        util.putString(Keys.USERNAME, userResponse.userInfo.username);
+        util.putString(Keys.FIRSTNAME, userResponse.userInfo.firstName);
+        util.putString(Keys.LASTNAME, userResponse.userInfo.lastName);
+        util.putString(Keys.USER_DESCRIPTION, userResponse.userInfo.userDescription);
         view.loadMainActivity();
     }
 

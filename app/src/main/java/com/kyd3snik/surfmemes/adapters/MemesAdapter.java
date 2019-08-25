@@ -22,6 +22,52 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
     private Context context;
     private List<Meme> memes;
 
+    public MemesAdapter(List<Meme> data) {
+        setMemes(data);
+    }
+
+    private boolean findMemeById(Meme newMeme) {
+        for (Meme oldMeme : this.memes)
+            if (newMeme.id.equals(oldMeme.id))
+                return true;
+        return false;
+    }
+
+    private void concatMemesList(List<Meme> memes) {
+        for (Meme meme : memes)
+            if (!this.memes.contains(meme) && !findMemeById(meme))
+                this.memes.add(meme);
+    }
+
+    public void setMemes(List<Meme> memes) {
+        if (this.memes == null) {
+            this.memes = memes;
+        } else {
+            concatMemesList(memes);
+        }
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        if (context == null)
+            context = viewGroup.getContext();
+
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.item_meme, viewGroup, false);
+        return new ViewHolder(view, context);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        viewHolder.update(memes.get(i));
+    }
+
+    @Override
+    public int getItemCount() {
+        return memes == null ? 0 : memes.size();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final public Context context;
         public Meme meme;
@@ -64,7 +110,7 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
         public void update(Meme meme) {
             this.meme = meme;
             titleView.setText(meme.title);
-            Glide.with(context).load(meme.photoUrl).error(R.drawable.ic_add).into(imageView);
+            Glide.with(context).load(meme.photoUrl).into(imageView);
             setFavorite();
         }
 
@@ -72,34 +118,5 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
             likeButton.setImageResource(
                     meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
         }
-    }
-
-    public MemesAdapter(List<Meme> data) {
-        setMemes(data);
-    }
-
-    public void setMemes(List<Meme> memes) {
-        this.memes = memes;
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        if (context == null)
-            context = viewGroup.getContext();
-
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_meme, viewGroup, false);
-        return new ViewHolder(view, context);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.update(memes.get(i));
-    }
-
-    @Override
-    public int getItemCount() {
-        return memes == null ? 0 : memes.size();
     }
 }

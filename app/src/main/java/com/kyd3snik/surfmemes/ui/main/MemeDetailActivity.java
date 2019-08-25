@@ -40,15 +40,15 @@ public class MemeDetailActivity extends AppCompatActivity {
         if(timeDiff<millisInDay)
             timeView.setText("Cегодня");
         else
-            timeView.setText(String.valueOf(timeDiff/millisInDay)+" дней назад");
+            timeView.setText(timeDiff / millisInDay + " дней назад");
 
-        Glide.with(getApplicationContext()).load(meme.photoUrl).error(R.drawable.ic_add).into(imgView);
+        Glide.with(getApplicationContext()).load(meme.photoUrl).into(imgView);
         favoriteBtn.setImageResource(meme.isFavorite? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
         favoriteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 meme.isFavorite = !meme.isFavorite;
-                favoriteBtn.setImageResource(meme.isFavorite? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
+                favoriteBtn.setImageResource(meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
             }
         });
 

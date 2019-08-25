@@ -1,6 +1,7 @@
 package com.kyd3snik.surfmemes.ui.main;
 
 import android.app.Activity;
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,13 +21,13 @@ import android.widget.TextView;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.adapters.MemesAdapter;
 import com.kyd3snik.surfmemes.models.Meme;
-import com.kyd3snik.surfmemes.presentors.ProfilePresentor;
+import com.kyd3snik.surfmemes.presenters.ProfilePresenter;
 import com.kyd3snik.surfmemes.ui.login.LoginActivity;
 
 import java.util.List;
 
 
-public class ProfileFragment extends Fragment implements ProfilePresentor.ProfileView {
+public class ProfileFragment extends Fragment implements ProfilePresenter.ProfileView {
     private View rootView;
     private TextView nameTv;
     private TextView descriptionTv;
@@ -34,7 +35,7 @@ public class ProfileFragment extends Fragment implements ProfilePresentor.Profil
     private RecyclerView favoriteMemesRv;
     private MemesAdapter memesAdapter;
     private PopupMenu popupMenu;
-    private ProfilePresentor profilePresentor;
+    private ProfilePresenter profilePresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ProfileFragment extends Fragment implements ProfilePresentor.Profil
     }
 
     private void initListeners() {
-        popupMenu.setOnMenuItemClickListener(profilePresentor);
+        popupMenu.setOnMenuItemClickListener(profilePresenter);
 
         menuIb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +71,7 @@ public class ProfileFragment extends Fragment implements ProfilePresentor.Profil
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        profilePresentor = new ProfilePresentor(getContext(), this);
+        profilePresenter = new ProfilePresenter(getContext(), this);
         initListeners();
     }
 
@@ -109,9 +110,15 @@ public class ProfileFragment extends Fragment implements ProfilePresentor.Profil
     }
 
     @Override
+    public LifecycleOwner getLivecycleOwner() {
+        return getActivity();
+    }
+
+    @Override
     public void loadLoginActivity() {
         Activity activity = getActivity();
         activity.startActivity(new Intent(activity, LoginActivity.class));
         activity.finish();
     }
+
 }

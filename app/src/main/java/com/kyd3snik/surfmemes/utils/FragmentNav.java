@@ -13,8 +13,8 @@ public class FragmentNav {
         this.fragmentManager = fragmentManager;
     }
 
-    public void add(Fragment fragment) {
-        fragmentManager.beginTransaction().add(R.id.fragmentHolder, fragment).hide(fragment).commit();
+    public void add(Fragment fragment, String tag) {
+        fragmentManager.beginTransaction().add(R.id.fragmentHolder, fragment, tag).hide(fragment).commit();
         active = fragment;
     }
 

@@ -8,20 +8,19 @@ import android.support.v7.app.AppCompatActivity;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.ui.login.LoginActivity;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity implements Runnable {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent startIntent = new Intent(SplashActivity.this, LoginActivity.class);
-                SplashActivity.this.startActivity(startIntent);
-                SplashActivity.this.finish();
-            }
-        },300);
+        new Handler().postDelayed(this, 300);
+    }
+
+    @Override
+    public void run() {
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 }

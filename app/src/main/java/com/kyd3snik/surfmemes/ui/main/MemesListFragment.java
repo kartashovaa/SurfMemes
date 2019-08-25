@@ -1,6 +1,7 @@
 package com.kyd3snik.surfmemes.ui.main;
 
 
+import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,27 +12,20 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.adapters.MemesAdapter;
-import com.kyd3snik.surfmemes.api.NetworkService;
 import com.kyd3snik.surfmemes.models.Meme;
+import com.kyd3snik.surfmemes.repositories.MemesRepository;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class MemesListFragment extends Fragment implements Callback<List<Meme>> {
+public class MemesListFragment extends Fragment implements MemesRepository.OnLoadedMemesListener, Observer<List<Meme>> {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MemesAdapter memesAdapter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private ImageButton searchButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,47 +36,59 @@ public class MemesListFragment extends Fragment implements Callback<List<Meme>> 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initViews(view);
+        initListeners();
+        showMemes();
 
+    }
+
+    private void initViews(View view) {
         recyclerView = view.findViewById(R.id.memes_recycle_view);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorAccent);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorBackground);
+    }
+
+    private void initListeners() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 showMemes();
             }
         });
-        showMemes();
     }
 
-    void setMemes(List<Meme> memes) {
+    private void setMemes(List<Meme> memes) {
         if (memesAdapter == null) {
             memesAdapter = new MemesAdapter(memes);
             recyclerView.setAdapter(memesAdapter);
         } else {
             memesAdapter.setMemes(memes);
-            memesAdapter.notifyDataSetChanged();
         }
     }
 
-    void showMemes() {
-
-        NetworkService.getInstance().getMemeApi().getMemes().enqueue(this);
+    public void showMemes() {
+        MemesRepository.getLocalMemes().observe(getActivity(), this);
+        MemesRepository.getMemes(this);
     }
 
     @Override
-    public void onResponse(Call<List<Meme>> call, Response<List<Meme>> response) {
-        if (response.isSuccessful())
-            setMemes(response.body());
+    public void OnSuccess(List<Meme> memes) {
+        setMemes(memes);
         swipeRefreshLayout.setRefreshing(false);
+        memesAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onFailure(Call<List<Meme>> call, Throwable t) {
-        swipeRefreshLayout.setRefreshing(false);
-        //TODO: replace
+    public void OnError(String errorMsg) {
         ((MainActivity) getActivity()).showErrorLoadFragment();
+        swipeRefreshLayout.setRefreshing(false);
+
+    }
+
+    @Override
+    public void onChanged(@Nullable List<Meme> memes) {
+        setMemes(memes);
     }
 }

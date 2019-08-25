@@ -20,5 +20,4 @@ public class ErrorLoadFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_error_load, container, false);
     }
-
 }

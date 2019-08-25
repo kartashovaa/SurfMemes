@@ -13,15 +13,18 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.kyd3snik.surfmemes.R;
+import com.kyd3snik.surfmemes.models.Meme;
+import com.kyd3snik.surfmemes.repositories.MemesRepository;
 
 public class AddMemeActivity extends AppCompatActivity {
-    private EditText title_et;
-    private EditText text_et;
-    private Button create_button;
-    private ImageButton close_button;
-    private ImageButton attach_button;
-    private ImageView dettach_button;
-    private ImageView attached_image_view;
+    private EditText titleEt;
+    private EditText textEt;
+    private Button createButton;
+    private ImageButton closeButton;
+    private ImageButton attachButton;
+    private ImageView dettachButton;
+    private ImageView attachedImageView;
+    private String attachedImagePath = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,59 +35,73 @@ public class AddMemeActivity extends AppCompatActivity {
     }
 
     void initViews() {
-        title_et = findViewById(R.id.title_et);
-        text_et = findViewById(R.id.text_et);
-        close_button = findViewById(R.id.close_button);
-        create_button = findViewById(R.id.create_button);
-        attach_button = findViewById(R.id.attach_button);
-        dettach_button = findViewById(R.id.dettach_button);
-        attached_image_view = findViewById(R.id.attached_image_view);
+        titleEt = findViewById(R.id.title_et);
+        textEt = findViewById(R.id.text_et);
+        closeButton = findViewById(R.id.close_button);
+        createButton = findViewById(R.id.create_button);
+        attachButton = findViewById(R.id.attach_button);
+        dettachButton = findViewById(R.id.dettach_button);
+        attachedImageView = findViewById(R.id.attached_image_view);
 
         setEnabledCreateButton(false);
-        attached_image_view.setVisibility(View.GONE);
-        dettach_button.setVisibility(View.GONE);
+        attachedImageView.setVisibility(View.GONE);
+        dettachButton.setVisibility(View.GONE);
     }
 
     void setEnabledCreateButton(boolean enable) {
-        create_button.setEnabled(enable);
-        create_button.setAlpha(enable ? 1f : 0.5f);
+        createButton.setEnabled(enable);
+        createButton.setAlpha(enable ? 1f : 0.5f);
+    }
+
+    private Meme getMeme() {
+        Meme meme = new Meme();
+        long createdDate = System.currentTimeMillis() / 1000;
+        meme.id = String.valueOf(createdDate);
+        meme.title = titleEt.getText().toString();
+        meme.description = textEt.getText().toString();
+        meme.createdDate = createdDate;
+        if (attachedImageView.getVisibility() == View.VISIBLE)
+            meme.photoUrl = attachedImagePath;
+        return meme;
     }
 
     void initListeners() {
-        close_button.setOnClickListener(new View.OnClickListener() {
+        closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        create_button.setOnClickListener(new View.OnClickListener() {
+        createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO : Add to database
+                MemesRepository.putMeme(getMeme());
                 finish();
             }
         });
 
-        attach_button.setOnClickListener(new View.OnClickListener() {
+        attachButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: Select photo from gallery
-                Glide.with(AddMemeActivity.this).load(R.drawable.avatar).into(attached_image_view);
-                attached_image_view.setVisibility(View.VISIBLE);
-                dettach_button.setVisibility(View.VISIBLE);
+                //attachedMemePath = getPhotoFromGallary();
+                Glide.with(AddMemeActivity.this).load(attachedImagePath).into(attachedImageView);
+                attachedImageView.setVisibility(View.VISIBLE);
+                dettachButton.setVisibility(View.VISIBLE);
             }
         });
 
-        dettach_button.setOnClickListener(new View.OnClickListener() {
+        dettachButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attached_image_view.setVisibility(View.GONE);
-                dettach_button.setVisibility(View.GONE);
+                attachedImagePath = "";
+                attachedImageView.setVisibility(View.GONE);
+                dettachButton.setVisibility(View.GONE);
             }
         });
 
-        title_et.addTextChangedListener(new TextWatcher() {
+        titleEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -96,7 +113,7 @@ public class AddMemeActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setEnabledCreateButton(!title_et.getText().toString().trim().isEmpty());
+                setEnabledCreateButton(!titleEt.getText().toString().trim().isEmpty());
             }
         });
     }
