@@ -2,6 +2,7 @@ package com.kyd3snik.surfmemes.ui.main;
 
 
 import android.arch.lifecycle.Observer;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,6 +46,7 @@ public class MemesListFragment extends Fragment implements MemesRepository.OnLoa
     private void initViews(View view) {
         recyclerView = view.findViewById(R.id.memes_recycle_view);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        searchButton = view.findViewById(R.id.search_button);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorAccent);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorBackground);
@@ -57,6 +59,12 @@ public class MemesListFragment extends Fragment implements MemesRepository.OnLoa
                 showMemes();
             }
         });
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadSearchActivity();
+            }
+        });
     }
 
     private void setMemes(List<Meme> memes) {
@@ -64,13 +72,17 @@ public class MemesListFragment extends Fragment implements MemesRepository.OnLoa
             memesAdapter = new MemesAdapter(memes);
             recyclerView.setAdapter(memesAdapter);
         } else {
-            memesAdapter.setMemes(memes);
+            memesAdapter.addMemes(memes);
         }
     }
 
     public void showMemes() {
         MemesRepository.getLocalMemes().observe(getActivity(), this);
         MemesRepository.getMemes(this);
+    }
+
+    void loadSearchActivity() {
+        getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
     }
 
     @Override

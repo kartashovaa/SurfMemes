@@ -97,7 +97,7 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
             memesAdapter = new MemesAdapter(memes);
             favoriteMemesRv.setAdapter(memesAdapter);
         } else {
-            memesAdapter.setMemes(memes);
+            memesAdapter.addMemes(memes);
             memesAdapter.notifyDataSetChanged();
         }
     }

@@ -41,8 +41,12 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
     }
 
     public void setMemes(List<Meme> memes) {
+        this.memes = memes;
+    }
+
+    public void addMemes(List<Meme> memes) {
         if (this.memes == null) {
-            this.memes = memes;
+            setMemes(memes);
         } else {
             concatMemesList(memes);
         }
