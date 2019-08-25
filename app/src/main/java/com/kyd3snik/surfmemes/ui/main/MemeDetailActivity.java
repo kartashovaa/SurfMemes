@@ -74,7 +74,7 @@ public class MemeDetailActivity extends AppCompatActivity {
         if (timeDiff < millisInDay)
             timeView.setText(getString(R.string.today));
         else
-            timeView.setText(String.format("%d%s", timeDiff / millisInDay, getString(R.string.date_view_suffix)));
+            timeView.setText(String.format("%d %s", timeDiff / millisInDay, getString(R.string.date_view_suffix)));
         Glide.with(getApplicationContext()).load(meme.photoUrl).into(imgView);
         favoriteBtn.setImageResource(meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
     }
