@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.models.Meme;
+import com.kyd3snik.surfmemes.storages.UserStorage;
 import com.kyd3snik.surfmemes.utils.ShareUtil;
 
 public class MemeDetailActivity extends AppCompatActivity {
@@ -26,6 +27,7 @@ public class MemeDetailActivity extends AppCompatActivity {
     private TextView timeView;
     private ImageButton favoriteBtn;
     private TextView detailView;
+    private TextView usernameTv;
     private ImageButton closeBtn;
     private ImageButton shareBtn;
 
@@ -37,6 +39,7 @@ public class MemeDetailActivity extends AppCompatActivity {
         meme = (Meme) getIntent().getSerializableExtra("Meme");
         initViews();
         initListeners();
+        usernameTv.setText(UserStorage.getUserName());
         showMeme();
     }
 
@@ -48,6 +51,7 @@ public class MemeDetailActivity extends AppCompatActivity {
         detailView = findViewById(R.id.detail_view);
         closeBtn = findViewById(R.id.close_button);
         shareBtn = findViewById(R.id.share_button);
+        usernameTv = findViewById(R.id.username_tv);
     }
 
     private void initListeners() {

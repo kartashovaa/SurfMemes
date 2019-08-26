@@ -28,13 +28,15 @@ public class MemesListPresenter implements Observer<List<Meme>> {
             public void onResponse(@NonNull Call<List<Meme>> call, @NonNull Response<List<Meme>> response) {
                 if (response.isSuccessful())
                     view.showMemes(response.body());
+                else
+                    view.showLoadError();
                 view.stopRefreshing();
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Meme>> call, @NonNull Throwable t) {
                 view.stopRefreshing();
-                view.showLoadErrorFragment();
+                view.showLoadError();
             }
         });
     }
@@ -50,7 +52,7 @@ public class MemesListPresenter implements Observer<List<Meme>> {
 
         LifecycleOwner getLifecycleOwner();
 
-        void showLoadErrorFragment();
+        void showLoadError();
 
         void stopRefreshing();
     }

@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
     private FragmentNav fragmentNav;
     private Fragment memesList;
     private Fragment profile;
-    private Fragment errorLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private void initFragmentNav() {
         fragmentNav = new FragmentNav(getSupportFragmentManager());
         memesList = new MemesListFragment();
-        errorLoad = new ErrorLoadFragment();
         fragmentNav.add(memesList, "memesList");
-        fragmentNav.add(errorLoad, "errorLoad");
         fragmentNav.show(memesList);
     }
 
@@ -70,9 +67,4 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddMemeActivity.class);
         startActivity(intent);
     }
-
-    public void showErrorLoadFragment() {
-        fragmentNav.show(errorLoad);
-    }
-
 }

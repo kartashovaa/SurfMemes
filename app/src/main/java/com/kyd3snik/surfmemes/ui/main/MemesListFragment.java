@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.adapters.MemesAdapter;
@@ -25,6 +26,7 @@ import java.util.List;
 public class MemesListFragment extends Fragment implements MemesListPresenter.MemesListView {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView loadErrorTv;
     private MemesAdapter memesAdapter;
     private ImageButton searchButton;
     private MemesListPresenter presenter;
@@ -55,6 +57,7 @@ public class MemesListFragment extends Fragment implements MemesListPresenter.Me
         recyclerView = view.findViewById(R.id.memes_recycle_view);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         searchButton = view.findViewById(R.id.search_button);
+        loadErrorTv = view.findViewById(R.id.load_error_tv);
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorAccent);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorBackground);
@@ -81,6 +84,7 @@ public class MemesListFragment extends Fragment implements MemesListPresenter.Me
 
     @Override
     public void showMemes(List<Meme> memes) {
+        hideLoadError();
         if (memesAdapter == null) {
             memesAdapter = new MemesAdapter(memes, getActivity());
             recyclerView.setAdapter(memesAdapter);
@@ -90,8 +94,14 @@ public class MemesListFragment extends Fragment implements MemesListPresenter.Me
     }
 
     @Override
-    public void showLoadErrorFragment() {
-        //TODO: load error fragment
+    public void showLoadError() {
+        recyclerView.setVisibility(View.GONE);
+        loadErrorTv.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadError() {
+        loadErrorTv.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
