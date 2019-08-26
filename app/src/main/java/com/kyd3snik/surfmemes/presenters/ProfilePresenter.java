@@ -6,28 +6,25 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.PopupMenu;
 
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.api.NetworkService;
 import com.kyd3snik.surfmemes.models.Meme;
 import com.kyd3snik.surfmemes.repositories.MemesRepository;
-import com.kyd3snik.surfmemes.utils.PrefUtil;
+import com.kyd3snik.surfmemes.storages.UserStorage;
 
 import java.util.List;
 
-public class ProfilePresenter implements PopupMenu.OnMenuItemClickListener, MemesRepository.OnLoadedMemesListener, Observer<List<Meme>> {
+public class ProfilePresenter implements Observer<List<Meme>> {
     private Context context;
     private ProfileView view;
 
     public ProfilePresenter(Context context, ProfileView view) {
         this.view = view;
         this.context = context;
-        view.setName(PrefUtil.getInstance().getString(PrefUtil.Keys.USERNAME));
-        view.setDescription(PrefUtil.getInstance().getString(PrefUtil.Keys.USER_DESCRIPTION));
+        view.setName(UserStorage.getUserName());
+        view.setDescription(UserStorage.getUserDescription());
         showMemes();
     }
 
@@ -35,33 +32,20 @@ public class ProfilePresenter implements PopupMenu.OnMenuItemClickListener, Meme
         MemesRepository.getLocalMemes().observe(view.getLivecycleOwner(), this);
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.about:
-                Snackbar.make(view.getView(), "App for watch memes", Snackbar.LENGTH_LONG).show();
-                break;
-            case R.id.logout:
-                showExitDialogView();
-                break;
-        }
-        return true;
-
-    }
 
     @Override
     public void onChanged(@Nullable List<Meme> memes) {
         view.setMemes(memes);
     }
 
-    private void showExitDialogView() {
+    public void showExitDialogView() {
         new AlertDialog.Builder(context, R.style.DialogTheme)
                 .setTitle("Действительно хотите выйти?")
                 .setPositiveButton("ВЫЙТИ", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         NetworkService.getInstance().getAuthApi().logout();
-                        PrefUtil.getInstance().clear();
+                        UserStorage.clear();
                         view.loadLoginActivity();
                     }
                 }).setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
@@ -70,19 +54,6 @@ public class ProfilePresenter implements PopupMenu.OnMenuItemClickListener, Meme
             }
         }).show();
     }
-
-    @Override
-    public void OnSuccess(List<Meme> memes) {
-        view.setMemes(memes);
-
-    }
-
-    @Override
-    public void OnError(String errorMsg) {
-        Snackbar.make(view.getView(), errorMsg, Snackbar.LENGTH_LONG).show();
-
-    }
-
 
     public interface ProfileView {
         void setName(String name);

@@ -1,16 +1,10 @@
 package com.kyd3snik.surfmemes.ui.main;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,11 +17,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.models.Meme;
-import com.kyd3snik.surfmemes.repositories.MemesRepository;
+import com.kyd3snik.surfmemes.presenters.AddMemePresenter;
+
 
 public class AddMemeActivity extends AppCompatActivity {
-    private static final int READ_REQUEST_CODE = 0;
-    private static final int PHOTO_LOAD_REQUEST = 1;
     private EditText titleEt;
     private EditText textEt;
     private Button createButton;
@@ -36,6 +29,7 @@ public class AddMemeActivity extends AppCompatActivity {
     private ImageView dettachButton;
     private ImageView attachedImageView;
     private String attachedImagePath = "";
+    private AddMemePresenter presenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +37,7 @@ public class AddMemeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_meme);
         initViews();
         initListeners();
+        presenter = new AddMemePresenter(this);
     }
 
     private void initViews() {
@@ -54,7 +49,7 @@ public class AddMemeActivity extends AppCompatActivity {
         dettachButton = findViewById(R.id.dettach_button);
         attachedImageView = findViewById(R.id.attached_image_view);
 
-        setEnabledCreateButton(false);
+        setEnableCreateButton(false);
         attachedImageView.setVisibility(View.GONE);
         dettachButton.setVisibility(View.GONE);
     }
@@ -70,15 +65,15 @@ public class AddMemeActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MemesRepository.putMeme(getMeme());
-                finish();
+                createButton.setEnabled(false);
+                presenter.saveMeme(getMeme());
             }
         });
 
         attachButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPhotoFromGallery();
+                presenter.getPhotoFromGallery();
             }
         });
 
@@ -103,14 +98,9 @@ public class AddMemeActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                setEnabledCreateButton(!titleEt.getText().toString().trim().isEmpty());
+                setEnableCreateButton(!titleEt.getText().toString().trim().isEmpty());
             }
         });
-    }
-
-    private void setEnabledCreateButton(boolean enable) {
-        createButton.setEnabled(enable);
-        createButton.setAlpha(enable ? 1f : 0.5f);
     }
 
     private Meme getMeme() {
@@ -125,56 +115,35 @@ public class AddMemeActivity extends AppCompatActivity {
         return meme;
     }
 
-    private void getPhotoFromGallery() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_REQUEST_CODE);
-        } else {
-            loadPhoto();
-        }
 
+    private void setEnableCreateButton(boolean enable) {
+        createButton.setEnabled(enable);
+        createButton.setAlpha(enable ? 1f : 0.5f);
     }
 
-    private void loadPhoto() {
-        Intent photoPicker = new Intent(Intent.ACTION_PICK);
-        photoPicker.setType("image/*");
-        startActivityForResult(photoPicker, PHOTO_LOAD_REQUEST);
-    }
-
-    private String getPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        //startManagingCursor(cursor);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
-    private void setAttachedImage(Uri uri) {
-        attachedImagePath = getPath(uri);
+    private void setAttachedPhoto(String path) {
+        attachedImagePath = path;
         Glide.with(this).load(attachedImagePath).into(attachedImageView);
         attachedImageView.setVisibility(View.VISIBLE);
         attachButton.setVisibility(View.GONE);
         dettachButton.setVisibility(View.VISIBLE);
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PHOTO_LOAD_REQUEST && resultCode == RESULT_OK && data != null) {
-            setAttachedImage(data.getData());
-
-        }
+        if (requestCode == AddMemePresenter.PHOTO_LOAD_REQUEST
+                && resultCode == RESULT_OK
+                && data != null)
+            setAttachedPhoto(presenter.getPath(data.getData()));
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == READ_REQUEST_CODE)
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                loadPhoto();
-            }
+        if (requestCode == AddMemePresenter.READ_REQUEST_CODE
+                && grantResults.length == 1
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            presenter.getPhotoFromGallery();
     }
 }

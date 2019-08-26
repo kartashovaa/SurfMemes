@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.presenters.LoginPresenter;
-import com.kyd3snik.surfmemes.repositories.AuthRepository;
 import com.kyd3snik.surfmemes.textWatchers.CustomPhoneNumberFormattingTextWatcher;
 import com.kyd3snik.surfmemes.ui.main.MainActivity;
 
@@ -45,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
         loginBox = findViewById(R.id.login_box);
         passwordField = findViewById(R.id.password_te);
         passwordBox = findViewById(R.id.password_box);
-        passwordBox.setHelperText(String.format(getString(R.string.password_helper_pattern), AuthRepository.PASSWORD_LENGTH));
+        passwordBox.setHelperText(String.format(getString(R.string.password_helper_pattern), LoginPresenter.PASSWORD_LENGTH));
         loginBtn = findViewById(R.id.login_button);
         loginProgressBar = findViewById(R.id.login_pb);
         passwordBtn = passwordBox.getEndIconImageButton();
@@ -53,7 +52,13 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
     }
 
     private void initListeners() {
-        loginBtn.setOnClickListener(presenter);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.loginUser();
+            }
+        });
+
         loginField.addTextChangedListener(new CustomPhoneNumberFormattingTextWatcher(loginField));
         passwordBtn.setOnClickListener(new View.OnClickListener() {
             boolean is_hidden = true;

@@ -23,23 +23,21 @@ import com.kyd3snik.surfmemes.utils.ShareUtil;
 import java.util.List;
 
 public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
-    private static Context context;
     private static Activity activity;
     private List<Meme> memes;
 
     public MemesAdapter(List<Meme> data, Activity activity) {
         setMemes(data);
         MemesAdapter.activity = activity;
-
     }
 
     private static void showMemeDetailActivity(Meme meme, View titleView, View imageView) {
-        Intent intent = new Intent(context, MemeDetailActivity.class);
+        Intent intent = new Intent(activity, MemeDetailActivity.class);
         intent.putExtra("Meme", meme);
         Pair<View, String> title = Pair.create(titleView, "title");
         Pair<View, String> image = Pair.create(imageView, "image");
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, title, image);
-        context.startActivity(intent, options.toBundle());
+        activity.startActivity(intent, options.toBundle());
     }
 
     private boolean findMemeById(Meme newMeme) {
@@ -64,18 +62,16 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
             setMemes(memes);
         } else {
             concatMemesList(memes);
+            notifyDataSetChanged();
         }
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        if (context == null)
-            context = viewGroup.getContext();
-
-        View view = LayoutInflater.from(context)
+        View view = LayoutInflater.from(activity)
                 .inflate(R.layout.item_meme, viewGroup, false);
-        return new ViewHolder(view, context);
+        return new ViewHolder(view, activity);
     }
 
     @Override

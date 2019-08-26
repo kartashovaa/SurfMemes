@@ -92,7 +92,7 @@ public class MemeDetailActivity extends AppCompatActivity {
             timeView.setText(getString(R.string.today));
         else
             timeView.setText(String.format("%d %s", timeDiff / millisInDay, getString(R.string.date_view_suffix)));
-        Glide.with(getApplicationContext()).load(meme.photoUrl).listener(new RequestListener<Drawable>() {
+        Glide.with(this).load(meme.photoUrl).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 supportStartPostponedEnterTransition();

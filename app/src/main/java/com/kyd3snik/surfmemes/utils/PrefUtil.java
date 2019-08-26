@@ -44,7 +44,5 @@ public class PrefUtil {
         public static String FIRSTNAME = "firstName";
         public static String LASTNAME = "lastName";
         public static String USER_DESCRIPTION = "userDescription";
-
-
     }
 }

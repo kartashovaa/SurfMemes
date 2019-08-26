@@ -1,7 +1,7 @@
 package com.kyd3snik.surfmemes.ui.main;
 
 
-import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,19 +18,27 @@ import android.widget.ImageButton;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.adapters.MemesAdapter;
 import com.kyd3snik.surfmemes.models.Meme;
-import com.kyd3snik.surfmemes.repositories.MemesRepository;
+import com.kyd3snik.surfmemes.presenters.MemesListPresenter;
 
 import java.util.List;
 
-public class MemesListFragment extends Fragment implements MemesRepository.OnLoadedMemesListener, Observer<List<Meme>> {
+public class MemesListFragment extends Fragment implements MemesListPresenter.MemesListView {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MemesAdapter memesAdapter;
     private ImageButton searchButton;
+    private MemesListPresenter presenter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        presenter = new MemesListPresenter(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_memes_list, container, false);
     }
 
@@ -39,7 +47,7 @@ public class MemesListFragment extends Fragment implements MemesRepository.OnLoa
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         initListeners();
-        showMemes();
+        presenter.showMemes();
 
     }
 
@@ -56,18 +64,23 @@ public class MemesListFragment extends Fragment implements MemesRepository.OnLoa
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                showMemes();
+                presenter.showMemes();
             }
         });
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadSearchActivity();
+                loadSearchMemeActivity();
             }
         });
     }
 
-    private void setMemes(List<Meme> memes) {
+    private void loadSearchMemeActivity() {
+        getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
+    }
+
+    @Override
+    public void showMemes(List<Meme> memes) {
         if (memesAdapter == null) {
             memesAdapter = new MemesAdapter(memes, getActivity());
             recyclerView.setAdapter(memesAdapter);
@@ -76,31 +89,19 @@ public class MemesListFragment extends Fragment implements MemesRepository.OnLoa
         }
     }
 
-    public void showMemes() {
-        MemesRepository.getLocalMemes().observe(getActivity(), this);
-        MemesRepository.getMemes(this);
-    }
-
-    private void loadSearchActivity() {
-        getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
+    @Override
+    public void showLoadErrorFragment() {
+        //TODO: load error fragment
     }
 
     @Override
-    public void OnSuccess(List<Meme> memes) {
-        setMemes(memes);
+    public LifecycleOwner getLifecycleOwner() {
+        return getActivity();
+    }
+
+
+    @Override
+    public void stopRefreshing() {
         swipeRefreshLayout.setRefreshing(false);
-        memesAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void OnError(String errorMsg) {
-        ((MainActivity) getActivity()).showErrorLoadFragment();
-        swipeRefreshLayout.setRefreshing(false);
-
-    }
-
-    @Override
-    public void onChanged(@Nullable List<Meme> memes) {
-        setMemes(memes);
     }
 }

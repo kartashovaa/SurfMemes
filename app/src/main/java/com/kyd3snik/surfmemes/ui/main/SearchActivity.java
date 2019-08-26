@@ -18,10 +18,14 @@ import com.kyd3snik.surfmemes.adapters.MemesAdapter;
 import com.kyd3snik.surfmemes.models.Meme;
 import com.kyd3snik.surfmemes.repositories.MemesRepository;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity implements MemesRepository.OnLoadedMemesListener, Observer<List<Meme>> {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class SearchActivity extends AppCompatActivity implements Observer<List<Meme>> {
 
     private EditText searchEt;
     private TextView errorTv;
@@ -82,9 +86,8 @@ public class SearchActivity extends AppCompatActivity implements MemesRepository
         if (query.isEmpty())
             memesRecycler.setVisibility(View.GONE);
         else {
-
             memesRecycler.setVisibility(View.VISIBLE);
-            List<Meme> filterMemes = new LinkedList<>();
+            List<Meme> filterMemes = new ArrayList<>();
             for (Meme meme : allMemes)
                 if (meme.title.toLowerCase().contains(query))
                     filterMemes.add(meme);
@@ -111,18 +114,21 @@ public class SearchActivity extends AppCompatActivity implements MemesRepository
     }
 
     private void loadMemes() {
-        MemesRepository.getMemes(this);
+        MemesRepository.getMemes().enqueue(new Callback<List<Meme>>() {
+            @Override
+            public void onResponse(Call<List<Meme>> call, Response<List<Meme>> response) {
+                if (response.isSuccessful())
+                    addMemes(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Meme>> call, Throwable t) {
+                finish();
+            }
+        });
         MemesRepository.getLocalMemes().observe(this, this);
     }
 
-    @Override
-    public void OnSuccess(List<Meme> memes) {
-        addMemes(memes);
-    }
-
-    @Override
-    public void OnError(String errorMsg) {
-    }
 
     @Override
     public void onChanged(@Nullable List<Meme> memes) {

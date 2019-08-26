@@ -1,6 +1,6 @@
 package com.kyd3snik.surfmemes.api;
 
-import com.kyd3snik.surfmemes.utils.PrefUtil;
+import com.kyd3snik.surfmemes.storages.UserStorage;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -13,9 +13,9 @@ public class NetworkService {
     private Retrofit mRetrofit;
 
     private NetworkService() {
-        String accessToken = PrefUtil.getInstance().getString("accessToken");
+        String accessToken = UserStorage.getToken();
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new TokenInterseptor(accessToken))
+                .addInterceptor(new TokenInterceptor(accessToken))
                 .build();
         mRetrofit = new Retrofit.Builder()
                 .client(okHttpClient)

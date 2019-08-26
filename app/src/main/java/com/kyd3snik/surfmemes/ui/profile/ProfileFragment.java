@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -35,7 +37,7 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
     private RecyclerView favoriteMemesRv;
     private MemesAdapter memesAdapter;
     private PopupMenu popupMenu;
-    private ProfilePresenter profilePresenter;
+    private ProfilePresenter presenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,21 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
     }
 
     private void initListeners() {
-        popupMenu.setOnMenuItemClickListener(profilePresenter);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.about:
+                        Snackbar.make(getView(), "App for watch memes", Snackbar.LENGTH_LONG).show();
+                        break;
+                    case R.id.logout:
+                        presenter.showExitDialogView();
+                        break;
+                }
+                return true;
+
+            }
+        });
 
         menuIb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +87,7 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        profilePresenter = new ProfilePresenter(getContext(), this);
+        presenter = new ProfilePresenter(getContext(), this);
         initListeners();
     }
 
