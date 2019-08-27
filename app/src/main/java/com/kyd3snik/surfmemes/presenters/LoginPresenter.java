@@ -1,15 +1,13 @@
 package com.kyd3snik.surfmemes.presenters;
 
-import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.kyd3snik.surfmemes.models.AuthRequest;
-import com.kyd3snik.surfmemes.models.UserResponse;
 import com.kyd3snik.surfmemes.repositories.AuthRepository;
 import com.kyd3snik.surfmemes.storages.UserStorage;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class LoginPresenter {
     public final static int PASSWORD_LENGTH = 6;
@@ -63,21 +61,51 @@ public class LoginPresenter {
         view.showProgressBar();
         if (isValidFields(auth))
             if (isValidAuth(auth))
-                AuthRepository.login(auth).enqueue(new Callback<UserResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<UserResponse> call, @NonNull Response<UserResponse> response) {
-                        if (response.isSuccessful()) {
-                            UserStorage.saveUser(response.body());
-                            view.loadMainActivity();
-                        } else
-                            showError(NETWORK_ERROR_MSG, ErrorType.NETWORK);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
-                        showError(NETWORK_ERROR_MSG, ErrorType.NETWORK);
-                    }
-                });
+                AuthRepository.login(auth)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(user -> {
+                                    UserStorage.saveUser(user);
+                                    view.loadMainActivity();
+                                }, e -> Log.d("ERROR_TAG", "RX ERROR")
+                        );
+//                        .subscribe(new Observer<UserResponse>() {
+//                            @Override
+//                            public void onSubscribe(Disposable d) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onNext(UserResponse userResponse) {
+//                                UserStorage.saveUser(userResponse);
+//                                view.loadMainActivity();
+//                            }
+//
+//                            @Override
+//                            public void onError(Throwable e) {
+//                                showError(NETWORK_ERROR_MSG,ErrorType.NETWORK);
+//                            }
+//
+//                            @Override
+//                            public void onComplete() {
+//
+//                            }
+//                        });
+//        enqueue(new Callback<UserResponse>() {
+//                    @Override
+//                    public void onResponse(@NonNull Call<UserResponse> call, @NonNull Response<UserResponse> response) {
+//                        if (response.isSuccessful()) {
+//                            UserStorage.saveUser(response.body());
+//                            view.loadMainActivity();
+//                        } else
+//                            showError(NETWORK_ERROR_MSG, ErrorType.NETWORK);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
+//                        showError(NETWORK_ERROR_MSG, ErrorType.NETWORK);
+//                    }
+//                });
     }
 
     private enum ErrorType {

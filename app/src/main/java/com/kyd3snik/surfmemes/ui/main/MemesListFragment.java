@@ -64,18 +64,8 @@ public class MemesListFragment extends Fragment implements MemesListPresenter.Me
     }
 
     private void initListeners() {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                presenter.showMemes();
-            }
-        });
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadSearchMemeActivity();
-            }
-        });
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.showMemes());
+        searchButton.setOnClickListener(v -> loadSearchMemeActivity());
     }
 
     private void loadSearchMemeActivity() {

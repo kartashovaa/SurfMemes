@@ -16,14 +16,9 @@ import android.widget.TextView;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.adapters.MemesAdapter;
 import com.kyd3snik.surfmemes.models.Meme;
-import com.kyd3snik.surfmemes.repositories.MemesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class SearchActivity extends AppCompatActivity implements Observer<List<Meme>> {
 
@@ -114,19 +109,19 @@ public class SearchActivity extends AppCompatActivity implements Observer<List<M
     }
 
     private void loadMemes() {
-        MemesRepository.getMemes().enqueue(new Callback<List<Meme>>() {
-            @Override
-            public void onResponse(Call<List<Meme>> call, Response<List<Meme>> response) {
-                if (response.isSuccessful())
-                    addMemes(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<List<Meme>> call, Throwable t) {
-                finish();
-            }
-        });
-        MemesRepository.getLocalMemes().observe(this, this);
+//        MemesRepository.getMemes().enqueue(new Callback<List<Meme>>() {
+//            @Override
+//            public void onResponse(Call<List<Meme>> call, Response<List<Meme>> response) {
+//                if (response.isSuccessful())
+//                    addMemes(response.body());
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Meme>> call, Throwable t) {
+//                finish();
+//            }
+//        });
+        //MemesRepository.getLocalMemes().observe(this, this);
     }
 
 

@@ -4,11 +4,11 @@ import com.kyd3snik.surfmemes.api.NetworkService;
 import com.kyd3snik.surfmemes.models.AuthRequest;
 import com.kyd3snik.surfmemes.models.UserResponse;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
 
 
 public class AuthRepository {
-    public static Call<UserResponse> login(AuthRequest auth) {
+    public static Observable<UserResponse> login(AuthRequest auth) {
         return NetworkService.getInstance().getAuthApi().login(auth);
     }
 }

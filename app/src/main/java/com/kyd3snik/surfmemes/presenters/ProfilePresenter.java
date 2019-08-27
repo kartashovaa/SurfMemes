@@ -11,7 +11,6 @@ import android.view.View;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.api.NetworkService;
 import com.kyd3snik.surfmemes.models.Meme;
-import com.kyd3snik.surfmemes.repositories.MemesRepository;
 import com.kyd3snik.surfmemes.storages.UserStorage;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class ProfilePresenter implements Observer<List<Meme>> {
     }
 
     private void showMemes() {
-        MemesRepository.getLocalMemes().observe(view.getLivecycleOwner(), this);
+//        MemesRepository.getLocalMemes().observe(view.getLivecycleOwner(), this);
     }
 
 

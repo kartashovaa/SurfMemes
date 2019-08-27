@@ -4,10 +4,10 @@ import com.kyd3snik.surfmemes.models.Meme;
 
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Observable;
 import retrofit2.http.GET;
 
 public interface MemeApi {
     @GET("/memes")
-    Call<List<Meme>> getMemes();
+    Observable<List<Meme>> getMemes();
 }

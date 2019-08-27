@@ -1,6 +1,5 @@
 package com.kyd3snik.surfmemes.repositories;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
@@ -10,7 +9,8 @@ import com.kyd3snik.surfmemes.models.Meme;
 
 import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 
 public class MemesRepository {
     private static MemesDatabase memesDatabaseInstance;
@@ -18,11 +18,11 @@ public class MemesRepository {
     public static void initializeDatabase(Context context) {
         memesDatabaseInstance = Room.databaseBuilder(
                 context, MemesDatabase.class, "memesDatabase")
-                .allowMainThreadQueries()
+//                .allowMainThreadQueries()
                 .build();
     }
 
-    public static Call<List<Meme>> getMemes() {
+    public static Observable<List<Meme>> getMemes() {
         return NetworkService.getInstance().getMemeApi().getMemes();
     }
 
@@ -32,7 +32,7 @@ public class MemesRepository {
             throw new RuntimeException("Database doesn't initialized!");
     }
 
-    public static LiveData<List<Meme>> getLocalMemes() {
+    public static Flowable<List<Meme>> getLocalMemes() {
         checkDatabase();
         return memesDatabaseInstance.memesDao().getAll();
 
@@ -40,6 +40,6 @@ public class MemesRepository {
 
     public static void putMeme(Meme meme) {
         checkDatabase();
-        memesDatabaseInstance.memesDao().insert(meme);
+        new Thread(() -> memesDatabaseInstance.memesDao().insert(meme)).start();
     }
 }

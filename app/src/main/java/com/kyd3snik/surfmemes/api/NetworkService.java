@@ -1,5 +1,6 @@
 package com.kyd3snik.surfmemes.api;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.kyd3snik.surfmemes.storages.UserStorage;
 
 import okhttp3.OkHttpClient;
@@ -20,6 +21,7 @@ public class NetworkService {
         mRetrofit = new Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(BASE_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
