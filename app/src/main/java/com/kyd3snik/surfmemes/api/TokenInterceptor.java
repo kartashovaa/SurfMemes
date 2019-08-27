@@ -21,7 +21,7 @@ public class TokenInterceptor implements Interceptor {
     public Response intercept(@NotNull Chain chain) throws IOException {
         Request request = chain.request();
         Request newRequest = request.newBuilder()
-                .addHeader("Authorisation", token)
+                .addHeader("Authorization", token)
                 .build();
         return chain.proceed(newRequest);
     }

@@ -52,12 +52,7 @@ public class LoginActivity extends AppCompatActivity implements LoginPresenter.L
     }
 
     private void initListeners() {
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.loginUser();
-            }
-        });
+        loginBtn.setOnClickListener(v -> presenter.loginUser());
 
         loginField.addTextChangedListener(new CustomPhoneNumberFormattingTextWatcher(loginField));
         passwordBtn.setOnClickListener(new View.OnClickListener() {

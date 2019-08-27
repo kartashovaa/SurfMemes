@@ -9,7 +9,7 @@ public class ShareUtil {
     public static void shareMeme(Context context, Meme meme) {
         StringBuilder shareText = new StringBuilder();
         shareText.append(meme.title);
-        if (meme.photoUrl != null & !meme.photoUrl.isEmpty())
+        if (meme.photoUrl != null && !meme.photoUrl.isEmpty())
             shareText.append("\n").append(meme.photoUrl);
         if (meme.description != null && !meme.description.isEmpty())
             shareText.append("\n").append(meme.description);

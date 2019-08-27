@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,9 +17,13 @@ import android.widget.TextView;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.adapters.MemesAdapter;
 import com.kyd3snik.surfmemes.models.Meme;
+import com.kyd3snik.surfmemes.repositories.MemesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class SearchActivity extends AppCompatActivity implements Observer<List<Meme>> {
 
@@ -50,12 +55,7 @@ public class SearchActivity extends AppCompatActivity implements Observer<List<M
     }
 
     private void initListeners() {
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        closeButton.setOnClickListener(v -> finish());
 
         searchEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -87,10 +87,9 @@ public class SearchActivity extends AppCompatActivity implements Observer<List<M
                 if (meme.title.toLowerCase().contains(query))
                     filterMemes.add(meme);
 
-            if (filterMemes.isEmpty()) {
-                memesRecycler.setVisibility(View.GONE);
-                errorTv.setVisibility(View.VISIBLE);
-            } else if (memesAdapter == null) {
+            if (filterMemes.isEmpty())
+                showError();
+            else if (memesAdapter == null) {
                 memesAdapter = new MemesAdapter(filterMemes, this);
                 memesRecycler.setAdapter(memesAdapter);
             } else {
@@ -98,6 +97,11 @@ public class SearchActivity extends AppCompatActivity implements Observer<List<M
                 memesAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    private void showError() {
+        memesRecycler.setVisibility(View.GONE);
+        errorTv.setVisibility(View.VISIBLE);
     }
 
     private void addMemes(List<Meme> memes) {
@@ -109,19 +113,10 @@ public class SearchActivity extends AppCompatActivity implements Observer<List<M
     }
 
     private void loadMemes() {
-//        MemesRepository.getMemes().enqueue(new Callback<List<Meme>>() {
-//            @Override
-//            public void onResponse(Call<List<Meme>> call, Response<List<Meme>> response) {
-//                if (response.isSuccessful())
-//                    addMemes(response.body());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Meme>> call, Throwable t) {
-//                finish();
-//            }
-//        });
-        //MemesRepository.getLocalMemes().observe(this, this);
+        MemesRepository.getAllMemes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::addMemes, e -> Log.d("ERROR_TAG", e.getMessage()));
     }
 
 

@@ -55,35 +55,19 @@ public class AddMemeActivity extends AppCompatActivity {
     }
 
     private void initListeners() {
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        closeButton.setOnClickListener(v -> finish());
+
+        createButton.setOnClickListener(v -> {
+            createButton.setEnabled(false);
+            presenter.saveMeme(getMeme());
         });
 
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createButton.setEnabled(false);
-                presenter.saveMeme(getMeme());
-            }
-        });
+        attachButton.setOnClickListener(v -> presenter.getPhotoFromGallery());
 
-        attachButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.getPhotoFromGallery();
-            }
-        });
-
-        dettachButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attachedImageView.setVisibility(View.GONE);
-                attachButton.setVisibility(View.VISIBLE);
-                dettachButton.setVisibility(View.GONE);
-            }
+        dettachButton.setOnClickListener(v -> {
+            attachedImageView.setVisibility(View.GONE);
+            attachButton.setVisibility(View.VISIBLE);
+            dettachButton.setVisibility(View.GONE);
         });
 
         titleEt.addTextChangedListener(new TextWatcher() {

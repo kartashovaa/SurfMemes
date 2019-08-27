@@ -1,7 +1,6 @@
 package com.kyd3snik.surfmemes.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -23,34 +22,29 @@ import com.kyd3snik.surfmemes.utils.ShareUtil;
 import java.util.List;
 
 public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> {
-    private static Activity activity;
+    private Activity activity;
     private List<Meme> memes;
 
     public MemesAdapter(List<Meme> data, Activity activity) {
         setMemes(data);
-        MemesAdapter.activity = activity;
+        this.activity = activity;
     }
 
-    private static void showMemeDetailActivity(Meme meme, View titleView, View imageView) {
-        Intent intent = new Intent(activity, MemeDetailActivity.class);
-        intent.putExtra("Meme", meme);
-        Pair<View, String> title = Pair.create(titleView, "title");
-        Pair<View, String> image = Pair.create(imageView, "image");
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, title, image);
-        activity.startActivity(intent, options.toBundle());
-    }
-
-    private boolean findMemeById(Meme newMeme) {
+    private boolean containsMeme(Meme newMeme) {
         for (Meme oldMeme : this.memes)
             if (newMeme.id.equals(oldMeme.id))
                 return true;
         return false;
     }
 
-    private void concatMemesList(List<Meme> memes) {
+    private int concatMemesList(List<Meme> memes) {
+        int concatSize = 0;
         for (Meme meme : memes)
-            if (!this.memes.contains(meme) && !findMemeById(meme))
+            if (!containsMeme(meme)) {
                 this.memes.add(meme);
+                ++concatSize;
+            }
+        return concatSize;
     }
 
     public void setMemes(List<Meme> memes) {
@@ -61,8 +55,9 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
         if (this.memes == null) {
             setMemes(memes);
         } else {
-            concatMemesList(memes);
-            notifyDataSetChanged();
+            int start = this.memes.size();
+            int size = concatMemesList(memes);
+            notifyItemRangeChanged(start, size);
         }
     }
 
@@ -85,40 +80,27 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private Context context;
+        private Activity context;
         private Meme meme;
         private ImageView imageView;
         private TextView titleView;
         private ImageButton likeButton;
         private ImageButton shareButton;
 
-        ViewHolder(@NonNull View itemView, final Context context) {
+        ViewHolder(@NonNull View itemView, final Activity context) {
             super(itemView);
             this.context = context;
             imageView = itemView.findViewById(R.id.image_view);
             titleView = itemView.findViewById(R.id.title_tv);
             likeButton = itemView.findViewById(R.id.like_button);
             shareButton = itemView.findViewById(R.id.share_button);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showMemeDetailActivity(meme, titleView, imageView);
-                }
-            });
-            likeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    meme.isFavorite = !meme.isFavorite;
-                    setFavorite();
-                }
+            itemView.setOnClickListener(v -> showMemeDetailActivity(meme, titleView, imageView));
+            likeButton.setOnClickListener(v -> {
+                meme.isFavorite = !meme.isFavorite;
+                setFavorite();
             });
 
-            shareButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ShareUtil.shareMeme(context, meme);
-                }
-            });
+            shareButton.setOnClickListener(v -> ShareUtil.shareMeme(context, meme));
         }
 
         void bind(Meme meme) {
@@ -132,6 +114,16 @@ public class MemesAdapter extends RecyclerView.Adapter<MemesAdapter.ViewHolder> 
             likeButton.setImageResource(
                     meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
         }
+
+        private void showMemeDetailActivity(Meme meme, View titleView, View imageView) {
+            Intent intent = new Intent(context, MemeDetailActivity.class);
+            intent.putExtra("Meme", meme);
+            Pair<View, String> title = Pair.create(titleView, "title");
+            Pair<View, String> image = Pair.create(imageView, "image");
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(context, title, image);
+            context.startActivity(intent, options.toBundle());
+        }
+
     }
 
 }

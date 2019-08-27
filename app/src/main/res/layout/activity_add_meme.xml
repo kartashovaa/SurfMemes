@@ -114,7 +114,7 @@
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_margin="16dp"
-        android:background="@drawable/meme_item_rounded_corners"
+        android:background="@drawable/attach_button_bg"
         android:src="@drawable/ic_attach"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

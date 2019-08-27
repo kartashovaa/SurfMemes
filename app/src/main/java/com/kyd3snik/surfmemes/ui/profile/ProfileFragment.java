@@ -1,7 +1,6 @@
 package com.kyd3snik.surfmemes.ui.profile;
 
 import android.app.Activity;
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +12,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -58,28 +56,20 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
     }
 
     private void initListeners() {
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.about:
-                        Snackbar.make(getView(), "App for watch memes", Snackbar.LENGTH_LONG).show();
-                        break;
-                    case R.id.logout:
-                        presenter.showExitDialogView();
-                        break;
-                }
-                return true;
-
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.about:
+                    Snackbar.make(getView(), "App for watch memes", Snackbar.LENGTH_LONG).show();
+                    break;
+                case R.id.logout:
+                    presenter.showExitDialogView();
+                    break;
             }
+            return true;
+
         });
 
-        menuIb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupMenu.show();
-            }
-        });
+        menuIb.setOnClickListener(v -> popupMenu.show());
 
     }
 
@@ -116,18 +106,6 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
             memesAdapter.addMemes(memes);
             memesAdapter.notifyDataSetChanged();
         }
-    }
-
-    @Override
-    public View getView() {
-        if (rootView == null)
-            rootView = getActivity().findViewById(R.id.root);
-        return rootView;
-    }
-
-    @Override
-    public LifecycleOwner getLivecycleOwner() {
-        return getActivity();
     }
 
     @Override

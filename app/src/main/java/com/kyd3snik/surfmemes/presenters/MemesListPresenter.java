@@ -1,6 +1,5 @@
 package com.kyd3snik.surfmemes.presenters;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.Nullable;
 
@@ -22,29 +21,15 @@ public class MemesListPresenter implements Observer<List<Meme>> {
     public void showMemes() {
         MemesRepository.getMemes()
                 .mergeWith(MemesRepository.getLocalMemes().toObservable())
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(list -> {
                     view.showMemes(list);
-                view.stopRefreshing();
+                    view.stopRefreshing();
+                }, e -> {
+                    view.stopRefreshing();
+                    view.showLoadError();
                 });
-//        MemesRepository.getLocalMemes().observe(view.getLifecycleOwner(), this);
-//        MemesRepository.getMemes().enqueue(new Callback<List<Meme>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<List<Meme>> call, @NonNull Response<List<Meme>> response) {
-//                if (response.isSuccessful())
-//                    view.showMemes(response.body());
-//                else
-//                    view.showLoadError();
-//                view.stopRefreshing();
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<List<Meme>> call, @NonNull Throwable t) {
-//                view.stopRefreshing();
-//                view.showLoadError();
-//            }
-//        });
     }
 
     @Override
@@ -55,8 +40,6 @@ public class MemesListPresenter implements Observer<List<Meme>> {
     public interface MemesListView {
 
         void showMemes(List<Meme> memes);
-
-        LifecycleOwner getLifecycleOwner();
 
         void showLoadError();
 

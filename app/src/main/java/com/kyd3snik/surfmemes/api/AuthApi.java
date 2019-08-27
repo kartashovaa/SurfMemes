@@ -6,7 +6,6 @@ import com.kyd3snik.surfmemes.models.UserResponse;
 
 import io.reactivex.Observable;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -15,6 +14,6 @@ public interface AuthApi {
     Observable<UserResponse> login(@Body AuthRequest auth);
 
     @POST("/auth/logout")
-    Call<ResponseBody> logout();
+    Observable<ResponseBody> logout();
 
 }

@@ -1,7 +1,6 @@
 package com.kyd3snik.surfmemes.ui.main;
 
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -49,8 +48,8 @@ public class MemesListFragment extends Fragment implements MemesListPresenter.Me
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         initListeners();
+        hideLoadError();
         presenter.showMemes();
-
     }
 
     private void initViews(View view) {
@@ -93,12 +92,6 @@ public class MemesListFragment extends Fragment implements MemesListPresenter.Me
         loadErrorTv.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
     }
-
-    @Override
-    public LifecycleOwner getLifecycleOwner() {
-        return getActivity();
-    }
-
 
     @Override
     public void stopRefreshing() {

@@ -18,7 +18,6 @@ public class MemesRepository {
     public static void initializeDatabase(Context context) {
         memesDatabaseInstance = Room.databaseBuilder(
                 context, MemesDatabase.class, "memesDatabase")
-//                .allowMainThreadQueries()
                 .build();
     }
 
@@ -38,6 +37,9 @@ public class MemesRepository {
 
     }
 
+    public static Observable<List<Meme>> getAllMemes() {
+        return getMemes().mergeWith(getLocalMemes().toObservable());
+    }
     public static void putMeme(Meme meme) {
         checkDatabase();
         new Thread(() -> memesDatabaseInstance.memesDao().insert(meme)).start();

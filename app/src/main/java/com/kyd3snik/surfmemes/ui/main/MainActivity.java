@@ -2,11 +2,9 @@ package com.kyd3snik.surfmemes.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.ui.profile.ProfileFragment;
@@ -28,26 +26,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListeners() {
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.memes_list:
-                        fragmentNav.show(memesList);
-                        break;
-                    case R.id.add:
-                        showAddMemeActivity();
-                        return false;
-                    case R.id.profile:
-                        if (profile == null) {
-                            profile = new ProfileFragment();
-                            fragmentNav.add(profile, "profile");
-                        }
-                        fragmentNav.show(profile);
-                        break;
-                }
-                return true;
+        bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.memes_list:
+                    fragmentNav.show(memesList);
+                    break;
+                case R.id.add:
+                    showAddMemeActivity();
+                    return false;
+                case R.id.profile:
+                    if (profile == null) {
+                        profile = new ProfileFragment();
+                        fragmentNav.add(profile, "profile");
+                    }
+                    fragmentNav.show(profile);
+                    break;
             }
+            return true;
         });
     }
 

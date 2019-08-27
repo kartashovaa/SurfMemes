@@ -69,43 +69,6 @@ public class LoginPresenter {
                                     view.loadMainActivity();
                                 }, e -> Log.d("ERROR_TAG", "RX ERROR")
                         );
-//                        .subscribe(new Observer<UserResponse>() {
-//                            @Override
-//                            public void onSubscribe(Disposable d) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onNext(UserResponse userResponse) {
-//                                UserStorage.saveUser(userResponse);
-//                                view.loadMainActivity();
-//                            }
-//
-//                            @Override
-//                            public void onError(Throwable e) {
-//                                showError(NETWORK_ERROR_MSG,ErrorType.NETWORK);
-//                            }
-//
-//                            @Override
-//                            public void onComplete() {
-//
-//                            }
-//                        });
-//        enqueue(new Callback<UserResponse>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<UserResponse> call, @NonNull Response<UserResponse> response) {
-//                        if (response.isSuccessful()) {
-//                            UserStorage.saveUser(response.body());
-//                            view.loadMainActivity();
-//                        } else
-//                            showError(NETWORK_ERROR_MSG, ErrorType.NETWORK);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
-//                        showError(NETWORK_ERROR_MSG, ErrorType.NETWORK);
-//                    }
-//                });
     }
 
     private enum ErrorType {

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,27 +54,14 @@ public class MemeDetailActivity extends AppCompatActivity {
     }
 
     private void initListeners() {
-        favoriteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                meme.isFavorite = !meme.isFavorite;
-                favoriteBtn.setImageResource(meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
-            }
+        favoriteBtn.setOnClickListener(v -> {
+            meme.isFavorite = !meme.isFavorite;
+            favoriteBtn.setImageResource(meme.isFavorite ? R.drawable.ic_favorite : R.drawable.ic_not_favorite);
         });
 
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        closeBtn.setOnClickListener(v -> finish());
 
-        shareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShareUtil.shareMeme(MemeDetailActivity.this, meme);
-            }
-        });
+        shareBtn.setOnClickListener(v -> ShareUtil.shareMeme(MemeDetailActivity.this, meme));
     }
 
     @Override
