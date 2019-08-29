@@ -79,8 +79,9 @@ public class SearchActivity extends AppCompatActivity implements SearchPresenter
             @Override
             public void afterTextChanged(Editable s) {
                 hideError();
-                memesAdapter.getFilter().filter(searchEt.getText(), count -> {
-                    if (count == 0)
+                String searchQuery = searchEt.getText().toString();
+                memesAdapter.getFilter().filter(searchQuery, count -> {
+                    if (!searchQuery.isEmpty() && count == 0)
                         showError();
                 });
             }
