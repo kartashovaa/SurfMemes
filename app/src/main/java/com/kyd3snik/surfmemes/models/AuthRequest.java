@@ -12,5 +12,4 @@ public class AuthRequest {
         this.login = login;
         this.password = password;
     }
-
 }

@@ -13,22 +13,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.adapters.MemesAdapter;
 import com.kyd3snik.surfmemes.models.Meme;
 import com.kyd3snik.surfmemes.presenters.MemesListPresenter;
+import com.kyd3snik.surfmemes.utils.MemeHelper;
 
 import java.util.List;
 
-public class MemesListFragment extends Fragment implements MemesListPresenter.MemesListView {
+public class MemesListFragment extends Fragment implements MemesListPresenter.MemesListView, MemeHelper.CanShowDetailActivity {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView loadErrorTv;
     private MemesAdapter memesAdapter;
     private ImageButton searchButton;
     private MemesListPresenter presenter;
+    private ProgressBar loadStatePb;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,34 +51,15 @@ public class MemesListFragment extends Fragment implements MemesListPresenter.Me
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         initListeners();
-        hideLoadError();
         presenter.showMemes();
-    }
-
-    private void initViews(View view) {
-        recyclerView = view.findViewById(R.id.memes_recycle_view);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        searchButton = view.findViewById(R.id.search_button);
-        loadErrorTv = view.findViewById(R.id.load_error_tv);
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorAccent);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorBackground);
-    }
-
-    private void initListeners() {
-        swipeRefreshLayout.setOnRefreshListener(() -> presenter.showMemes());
-        searchButton.setOnClickListener(v -> loadSearchMemeActivity());
-    }
-
-    private void loadSearchMemeActivity() {
-        getActivity().startActivity(new Intent(getActivity(), SearchActivity.class));
     }
 
     @Override
     public void showMemes(List<Meme> memes) {
         hideLoadError();
+        hideProgressBar();
         if (memesAdapter == null) {
-            memesAdapter = new MemesAdapter(memes, getActivity());
+            memesAdapter = new MemesAdapter(memes, getActivity(), this);
             recyclerView.setAdapter(memesAdapter);
         } else {
             memesAdapter.addMemes(memes);
@@ -88,13 +72,50 @@ public class MemesListFragment extends Fragment implements MemesListPresenter.Me
         loadErrorTv.setVisibility(View.VISIBLE);
     }
 
-    private void hideLoadError() {
-        loadErrorTv.setVisibility(View.GONE);
+    @Override
+    public void showProgressBar() {
+        recyclerView.setVisibility(View.GONE);
+        loadStatePb.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        loadStatePb.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopRefreshing() {
         swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showMemeDetailActivity(Meme meme, View titleView, View imageView) {
+        MemeHelper.showMemeDetailActivity(getActivity(), meme, titleView, imageView);
+    }
+
+    private void initViews(View view) {
+        recyclerView = view.findViewById(R.id.memes_recycle_view);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        searchButton = view.findViewById(R.id.search_button);
+        loadErrorTv = view.findViewById(R.id.load_error_tv);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorAccent);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorBackground);
+        loadStatePb = view.findViewById(R.id.load_state_pb);
+    }
+
+    private void initListeners() {
+        swipeRefreshLayout.setOnRefreshListener(() -> presenter.showMemes());
+        searchButton.setOnClickListener(v -> loadSearchMemeActivity());
+    }
+
+    private void loadSearchMemeActivity() {
+        startActivity(new Intent(getActivity(), SearchActivity.class));
+    }
+
+    private void hideLoadError() {
+        loadErrorTv.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 }

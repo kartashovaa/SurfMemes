@@ -35,9 +35,27 @@ public class AddMemeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_meme);
+        presenter = new AddMemePresenter(this);
         initViews();
         initListeners();
-        presenter = new AddMemePresenter(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AddMemePresenter.PHOTO_LOAD_REQUEST
+                && resultCode == RESULT_OK
+                && data != null)
+            setAttachedPhoto(presenter.getPath(data.getData()));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == AddMemePresenter.READ_REQUEST_CODE
+                && grantResults.length == 1
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            presenter.getPhotoFromGallery();
     }
 
     private void initViews() {
@@ -90,7 +108,6 @@ public class AddMemeActivity extends AppCompatActivity {
     private Meme getMeme() {
         Meme meme = new Meme();
         long createdDate = System.currentTimeMillis() / 1000;
-        meme.id = String.valueOf(createdDate);
         meme.title = titleEt.getText().toString();
         meme.description = textEt.getText().toString();
         meme.createdDate = createdDate;
@@ -111,23 +128,5 @@ public class AddMemeActivity extends AppCompatActivity {
         attachedImageView.setVisibility(View.VISIBLE);
         attachButton.setVisibility(View.GONE);
         dettachButton.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AddMemePresenter.PHOTO_LOAD_REQUEST
-                && resultCode == RESULT_OK
-                && data != null)
-            setAttachedPhoto(presenter.getPath(data.getData()));
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == AddMemePresenter.READ_REQUEST_CODE
-                && grantResults.length == 1
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            presenter.getPhotoFromGallery();
     }
 }

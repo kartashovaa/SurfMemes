@@ -3,14 +3,13 @@ package com.kyd3snik.surfmemes.repositories;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 
-import com.kyd3snik.surfmemes.api.MemesDatabase;
 import com.kyd3snik.surfmemes.api.NetworkService;
 import com.kyd3snik.surfmemes.models.Meme;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MemesRepository {
     private static MemesDatabase memesDatabaseInstance;
@@ -31,17 +30,18 @@ public class MemesRepository {
             throw new RuntimeException("Database doesn't initialized!");
     }
 
-    public static Flowable<List<Meme>> getLocalMemes() {
+    public static Observable<List<Meme>> getLocalMemes() {
         checkDatabase();
-        return memesDatabaseInstance.memesDao().getAll();
+        return memesDatabaseInstance.memesDao().getAll().toObservable();
 
     }
 
     public static Observable<List<Meme>> getAllMemes() {
-        return getMemes().mergeWith(getLocalMemes().toObservable());
+        return getMemes().mergeWith(getLocalMemes());
     }
+
     public static void putMeme(Meme meme) {
         checkDatabase();
-        new Thread(() -> memesDatabaseInstance.memesDao().insert(meme)).start();
+        Observable.just(meme).subscribeOn(Schedulers.io()).subscribe(mem -> memesDatabaseInstance.memesDao().insert(mem));
     }
 }

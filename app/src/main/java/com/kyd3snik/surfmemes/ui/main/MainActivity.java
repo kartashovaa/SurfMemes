@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentNav = new FragmentNav(getSupportFragmentManager());
         memesList = new MemesListFragment();
         fragmentNav.add(memesList, "memesList");
-        fragmentNav.show(memesList);
     }
 
     private void showAddMemeActivity() {

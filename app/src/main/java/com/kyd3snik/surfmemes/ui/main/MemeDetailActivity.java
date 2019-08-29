@@ -16,10 +16,11 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.models.Meme;
-import com.kyd3snik.surfmemes.storages.UserStorage;
+import com.kyd3snik.surfmemes.repositories.UserStorage;
 import com.kyd3snik.surfmemes.utils.ShareUtil;
 
 public class MemeDetailActivity extends AppCompatActivity {
+    private final int millisInDay = 60 * 60 * 24 * 1000;
     private Meme meme;
     private TextView titleView;
     private ImageView imgView;
@@ -40,6 +41,15 @@ public class MemeDetailActivity extends AppCompatActivity {
         initListeners();
         usernameTv.setText(UserStorage.getUserName());
         showMeme();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.home) {
+            supportFinishAfterTransition();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initViews() {
@@ -64,24 +74,15 @@ public class MemeDetailActivity extends AppCompatActivity {
         shareBtn.setOnClickListener(v -> ShareUtil.shareMeme(MemeDetailActivity.this, meme));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.home) {
-            supportFinishAfterTransition();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void showMeme() {
         titleView.setText(meme.title);
         detailView.setText(meme.description);
         long timeDiff = System.currentTimeMillis() - meme.createdDate * 1000;
-        final int millisInDay = 60 * 60 * 24 * 1000;
+
         if (timeDiff < millisInDay)
             timeView.setText(getString(R.string.today));
         else
-            timeView.setText(String.format("%d %s", timeDiff / millisInDay, getString(R.string.date_view_suffix)));
+            timeView.setText(String.format(getString(R.string.date_view_template), timeDiff / millisInDay));
         Glide.with(this).load(meme.photoUrl).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

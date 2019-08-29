@@ -15,5 +15,4 @@ public interface AuthApi {
 
     @POST("/auth/logout")
     Observable<ResponseBody> logout();
-
 }

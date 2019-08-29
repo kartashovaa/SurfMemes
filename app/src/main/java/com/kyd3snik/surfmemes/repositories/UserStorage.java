@@ -1,4 +1,4 @@
-package com.kyd3snik.surfmemes.storages;
+package com.kyd3snik.surfmemes.repositories;
 
 import com.kyd3snik.surfmemes.models.UserResponse;
 import com.kyd3snik.surfmemes.utils.PrefUtil;

@@ -2,7 +2,7 @@
     <string name="app_name">SurfMemes</string>
     <string name="login_button_text">Войти</string>
     <string name="empty_field_error">Поле не можен быть пустым!</string>
-    <string name="password_helper_pattern">Пароль должен содержать %d символов</string>
+    <string name="password_helper_template">Пароль должен содержать %d символов</string>
     <string name="memes_list">This is memes list</string>
     <string name="profile">This is profile</string>
     <string name="login_placeholder">Логин</string>
@@ -17,6 +17,11 @@
     <string name="create_button_text">создать</string>
     <string name="search_hint">Поиск</string>
     <string name="error_empty">Ничего не найдено</string>
-    <string name="date_view_suffix">дней назад</string>
+    <string name="date_view_template">%d дней назад</string>
     <string name="today">cегодня</string>
+    <string name="network_error_message">Во время запроса произошла ошибка, возможно вы неверно ввели логин/пароль</string>
+    <string name="empty_field">Поле не может быть пустым!</string>
+    <string name="cancel_text">ОТМЕНА</string>
+    <string name="exit_text">ВЫЙТИ</string>
+    <string name="exit_dialog_title">Действительно хотите выйти?</string>
 </resources>

@@ -9,10 +9,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class TokenInterceptor implements Interceptor {
-
     private String token;
 
-    public TokenInterceptor(String token) {
+    TokenInterceptor(String token) {
         this.token = token;
     }
 

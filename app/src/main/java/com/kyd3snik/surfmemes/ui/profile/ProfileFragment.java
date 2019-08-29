@@ -1,6 +1,7 @@
 package com.kyd3snik.surfmemes.ui.profile;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,14 +21,17 @@ import android.widget.TextView;
 
 import com.kyd3snik.surfmemes.R;
 import com.kyd3snik.surfmemes.adapters.MemesAdapter;
+import com.kyd3snik.surfmemes.api.NetworkService;
 import com.kyd3snik.surfmemes.models.Meme;
 import com.kyd3snik.surfmemes.presenters.ProfilePresenter;
+import com.kyd3snik.surfmemes.repositories.UserStorage;
 import com.kyd3snik.surfmemes.ui.login.LoginActivity;
+import com.kyd3snik.surfmemes.utils.MemeHelper;
 
 import java.util.List;
 
 
-public class ProfileFragment extends Fragment implements ProfilePresenter.ProfileView {
+public class ProfileFragment extends Fragment implements ProfilePresenter.ProfileView, MemeHelper.CanShowDetailActivity {
     private View rootView;
     private TextView nameTv;
     private TextView descriptionTv;
@@ -62,7 +66,7 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
                     Snackbar.make(getView(), "App for watch memes", Snackbar.LENGTH_LONG).show();
                     break;
                 case R.id.logout:
-                    presenter.showExitDialogView();
+                    showExitDialogView();
                     break;
             }
             return true;
@@ -76,9 +80,10 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        presenter = new ProfilePresenter(this);
         initViews(view);
-        presenter = new ProfilePresenter(getContext(), this);
         initListeners();
+        presenter.renderView();
     }
 
     @Override
@@ -100,7 +105,7 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
     @Override
     public void setMemes(List<Meme> memes) {
         if (memesAdapter == null) {
-            memesAdapter = new MemesAdapter(memes, getActivity());
+            memesAdapter = new MemesAdapter(memes, getActivity(), this);
             favoriteMemesRv.setAdapter(memesAdapter);
         } else {
             memesAdapter.addMemes(memes);
@@ -109,10 +114,24 @@ public class ProfileFragment extends Fragment implements ProfilePresenter.Profil
     }
 
     @Override
-    public void loadLoginActivity() {
-        Activity activity = getActivity();
-        activity.startActivity(new Intent(activity, LoginActivity.class));
-        activity.finish();
+    public void showMemeDetailActivity(Meme meme, View titleView, View imageView) {
+        MemeHelper.showMemeDetailActivity(getActivity(), meme, titleView, imageView);
     }
 
+    public void showExitDialogView() {
+        new AlertDialog.Builder(getContext(), R.style.DialogTheme)
+                .setTitle(getString(R.string.exit_dialog_title))
+                .setPositiveButton(getString(R.string.exit_text), (dialog, which) -> {
+                    NetworkService.getInstance().getAuthApi().logout();
+                    UserStorage.clear();
+                    loadLoginActivity();
+                }).setNegativeButton(getString(R.string.cancel_text), (dialog, which) -> {
+        }).show();
+    }
+
+    public void loadLoginActivity() {
+        Activity activity = getActivity();
+        startActivity(new Intent(activity, LoginActivity.class));
+        activity.finish();
+    }
 }

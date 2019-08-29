@@ -1,4 +1,4 @@
-package com.kyd3snik.surfmemes.api;
+package com.kyd3snik.surfmemes.repositories;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;

@@ -1,13 +1,12 @@
 package com.kyd3snik.surfmemes.api;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.kyd3snik.surfmemes.storages.UserStorage;
+import com.kyd3snik.surfmemes.repositories.UserStorage;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-//TODO: add token in headers
 public class NetworkService {
     private final static String BASE_URL = "https://demo3161256.mockable.io/";
     private static NetworkService mInstance;
@@ -30,8 +29,6 @@ public class NetworkService {
         if (mInstance == null)
             mInstance = new NetworkService();
         return mInstance;
-
-
     }
 
     public MemeApi getMemeApi() {
@@ -41,6 +38,5 @@ public class NetworkService {
     public AuthApi getAuthApi() {
         return mRetrofit.create(AuthApi.class);
     }
-
 }
 
